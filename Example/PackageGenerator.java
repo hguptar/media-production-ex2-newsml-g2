@@ -35,6 +35,7 @@ public class PackageGenerator {
 	private final static String VERSION_XPATH = "/newsItem/@version"; 
 	private final static String VERSION_CREATED_XPATH = "/newsItem/itemMeta/versionCreated";
 	private final static String TYPE_ROLE_XPATH = "/newsItem/itemMeta/role/name";
+	private final static String URGENCY_XPATH = "/newsItem/contentMeta/urgency";
 	private final static String DEPARTMENT_XPATH = "/newsItem/contentMeta/subject[@type='cpnat:department']/name";
 	private final static String CATEGORIES_XPATH = "/newsItem/contentMeta/subject[@type='cpnat:category']/name";
 	
@@ -133,6 +134,11 @@ public class PackageGenerator {
 				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String name = nodes.item(0).getTextContent();
 				newsItem.
+				
+				//Get NewsItem urgency
+				expr = xpath.compile(URGENCY_XPATH);
+				nodes = (NodeList)expr.evauluate(xmlDocument, XPathConstants.NODESET);
+				String urgency = nodes.item(0).getTextContent();
 				
 				// Adds current news item to newsItems-list
 				newsItems.add(newsItem);
