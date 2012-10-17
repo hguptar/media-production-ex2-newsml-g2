@@ -29,6 +29,8 @@ public class NewsItem {
 	private String name;
 	//Location of the news item
 	private String location;
+	//Class of the news item
+	private String class_ni;
 
 	// Add more fields here.
 	
@@ -129,6 +131,14 @@ public class NewsItem {
 	
 	public void setLocation(String location) {
 		this.location = location;
+	}
+	
+	public String getClassNI() {
+		return class_ni;
+	}
+	
+	public void setClassNI(String class_ni) {
+		this.class_ni = class_ni;
 	}
 	
 	@Override

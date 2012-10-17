@@ -40,6 +40,7 @@ public class PackageGenerator {
 	private final static String CATEGORIES_XPATH = "/newsItem/contentMeta/subject[@type='cpnat:category']/name";
 	private final static String NAME_XPATH = "/newsItem/itemMeta/service/name";
 	private final static String LOCATION_XPATH = "/newsItem/contentMeta/located/name";
+	private final static String CLASS_XPATH = "/newsItem/itemMeta/@qcode";
 	
 	private String newsItemFolder;
 	private ArrayList<NewsItem> newsItems;
@@ -142,6 +143,12 @@ public class PackageGenerator {
 				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String location = nodes.item(0).getTextContent();
 				newsItem.setLocation(location);
+				
+				//Get the class of news item
+				expr = xpath.compile(CLASS_XPATH);
+				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
+				String class_ni = nodes.item(0).getTextContent();
+				newsItem.setClassNI(class_ni);
 				
 				
 				//Get NewsItem urgency
