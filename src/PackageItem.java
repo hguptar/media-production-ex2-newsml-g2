@@ -31,13 +31,13 @@ public class PackageItem {
 	private String service_name;
 	private String title;
 	
-	//...
 	
 	/*
 	 * Fields in contentMetadata element
 	 */
-	private String headline;
 	private String contributor;
+	private String contributor_definition;
+	private String headline;
 	
 	/*
 	 * Fields in groupSet element
@@ -51,6 +51,12 @@ public class PackageItem {
 	/*
 	 * Getters and setters
 	 */
+	
+	
+	/*
+     * Getters and setters for contentMetadata element
+     */
+	
 	public String getHeadline() {
 	    return headline;
     }
@@ -65,6 +71,14 @@ public class PackageItem {
 
     public void setContributorName(String contributor) {
         this.contributor = contributor;
+    }
+    
+    public String getContributorDefinition() {
+        return contributor_definition;
+    }
+    
+    public void setContributorDefinition(String definition) {
+        this.contributor_definition = definition;
     }
     
 	/*

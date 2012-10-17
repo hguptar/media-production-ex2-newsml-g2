@@ -17,7 +17,7 @@ public class NewsItem {
 	// Date and time when the latest version was sent to customer
 	private String version_created;
 	private Date version_created_date;
-	// Type of the news item (PŠŠjuttu, Kainalo, Tausta...)
+	// Type of the news item (Paajuttu, Kainalo, Tausta...)
 	private String type_role;
 	// Departement
 	private String department;
