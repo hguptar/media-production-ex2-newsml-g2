@@ -128,6 +128,12 @@ public class PackageGenerator {
 				 * Add your own code here, e.g. rest of the needed elements from newsItem.
 				 */
 				
+				//Get name of news item article
+				expr = xpath.complite(NAME_XPATH);
+				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
+				String name = nodes.item(0).getTextContent();
+				newsItem.
+				
 				// Adds current news item to newsItems-list
 				newsItems.add(newsItem);
 				
