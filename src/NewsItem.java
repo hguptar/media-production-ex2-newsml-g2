@@ -25,6 +25,10 @@ public class NewsItem {
 	private String[] categories;
 	// Urgency of the news item
 	private String urgency;
+	// Name of the service of the news item
+	private String name;
+	//Location of the news item
+	private String location;
 
 	// Add more fields here.
 	
@@ -108,6 +112,23 @@ public class NewsItem {
 	
 	public void setUrgency(String urgency) {
 	    this.urgency = urgency;
+	}
+	
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getLocation() {
+		return location;
+	}
+	
+	public void setLocation(String location) {
+		this.location = location;
 	}
 	
 	@Override
