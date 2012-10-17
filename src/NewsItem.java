@@ -59,34 +59,34 @@ public class NewsItem {
 		this.version = version;
 	}
 
-	public String getVersion_created() {
+	public String getVersionCreated() {
 		return version_created;
 	}
 
-	public void setVersion_created(String version_created) {
+	public void setVersionCreated(String version_created) {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'H:m:s");
 		try {
 			Date date = df.parse(version_created);
-			setVersion_created_date(date);
+			setVersionCreatedDate(date);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		this.version_created = version_created;
 	}
 
-	public Date getVersion_created_date() {
+	public Date getVersionCreatedDate() {
 		return version_created_date;
 	}
 
-	public void setVersion_created_date(Date version_created_date) {
+	public void setVersionCreatedDate(Date version_created_date) {
 		this.version_created_date = version_created_date;
 	}
 
-	public String getType_role() {
+	public String getTypeRole() {
 		return type_role;
 	}
 
-	public void setType_role(String type_role) {
+	public void setTypeRole(String type_role) {
 		this.type_role = type_role;
 	}	
 
@@ -154,7 +154,7 @@ public class NewsItem {
 	@Override
 	public String toString() {
 		String s = "NewsItem " + getGuid() + "\n" +
-				"Version " + getVersion() + ", sent " + getVersion_created();
+				"Version " + getVersion() + ", sent " + getVersionCreated();
 		return s;
 	}
 }

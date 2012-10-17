@@ -107,13 +107,13 @@ public class PackageGenerator {
 				expr = xpath.compile(VERSION_CREATED_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String versionCreated = nodes.item(0).getTextContent();
-				newsItem.setVersion_created(versionCreated);
+				newsItem.setVersionCreated(versionCreated);
 				
 				//Get type of news item article
 				expr = xpath.compile(TYPE_ROLE_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String typeRole = nodes.item(0).getTextContent();
-				newsItem.setType_role(typeRole);
+				newsItem.setTypeRole(typeRole);
 				
 				expr = xpath.compile(DEPARTMENT_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
@@ -203,7 +203,7 @@ public class PackageGenerator {
 		
 		for (int i = 0; i < items; i++) {
 			System.out.println("Adding news item " + packageItems.get(i).getGuid() + " (" +
-				packageItems.get(i).getVersion_created() + ")");
+				packageItems.get(i).getVersionCreated() + ")");
 			packageItem.addNewsItem(packageItems.get(i));
 		}
 		return packageItem;
@@ -224,7 +224,7 @@ public class PackageGenerator {
 	private class NewsItemComparator implements Comparator<NewsItem>{
 		@Override
 		public int compare(NewsItem item1, NewsItem item2) {
-			return item1.getVersion_created_date().compareTo(item2.getVersion_created_date());
+			return item1.getVersionCreatedDate().compareTo(item2.getVersionCreatedDate());
 		}
 	}
 

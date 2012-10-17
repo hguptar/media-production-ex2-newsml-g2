@@ -1,4 +1,7 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PackageItem {
 	
@@ -32,10 +35,9 @@ public class PackageItem {
 	 * Fields in itemMeta element (ignored firstCreated, pubStatus, profile, edNote, signal and link) 
 	 */
 	private String version_created;
-	private String version_created_date;
+	private Date version_created_date;
 	private String service_name;
 	private String title;
-	
 	
 	/*
 	 * Fields in contentMeta element
@@ -106,7 +108,56 @@ public class PackageItem {
 	 * Getters and setters for itemMeta element
 	 */
 	
+	public String getItemClass() {
+	    return PackageItem.ITEMCLASS;
+	}
 	
+	public String getProvider() {
+	    return PackageItem.PROVIDER;
+	}
+	
+	public String getGenerator() {
+	    return PackageItem.GENERATOR;
+	}
+	
+	public String getVersionCreated() {
+	    return this.version_created;
+	}
+	
+	public void setVersionCreated(String version_created) {
+	    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'H:m:s");
+	    try {
+	        Date date = df.parse(version_created);
+	        setVersionCreatedDate(date);
+	    } catch (ParseException e) {
+            e.printStackTrace();
+        }
+	    this.version_created = version_created;
+	}
+	
+	public Date getVersionCreatedDate() {
+	    return this.version_created_date;
+	}
+	
+	public void setVersionCreatedDate(Date date) {
+	    this.version_created_date = date;
+	}
+	
+	public String getServiceName() {
+	    return this.service_name;
+	}
+	
+	public void setServiceName(String service_name) {
+	    this.service_name = service_name;
+	}
+	
+	public String getTitle() {
+	    return this.title;
+	}
+	
+	public void setTitle(String title) {
+	    this.title = title;
+	}
 	
 	/*
      * Getters and setters for contentMeta element
