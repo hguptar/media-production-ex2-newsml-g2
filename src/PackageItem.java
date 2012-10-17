@@ -20,12 +20,17 @@ public class PackageItem {
 	 */
 	private static final String ITEMCLASS = "ninat:composite";
 	private static final String PROVIDER = "STT";
-	private static final String GENERATOR = "YourGroup's NewsML Package Generator";
+	private static final String GENERATOR = "NewsML Package Generator of Group 3";
 	
 	/*
 	 * Fields in itemMeta element
 	 */
 	private String guid;
+	private String version_created;
+	private String version_created_date;
+	private String service_name;
+	private String title;
+	
 	//...
 	
 	/*

@@ -38,7 +38,7 @@ public class PackageGenerator {
 	private final static String URGENCY_XPATH = "/newsItem/contentMeta/urgency";
 	private final static String DEPARTMENT_XPATH = "/newsItem/contentMeta/subject[@type='cpnat:department']/name";
 	private final static String CATEGORIES_XPATH = "/newsItem/contentMeta/subject[@type='cpnat:category']/name";
-	private final static String NAME_XPATH = "/newsItem/itemMeta/service/name";
+	private final static String SERVICE_NAME_XPATH = "/newsItem/itemMeta/service/name";
 	private final static String LOCATION_XPATH = "/newsItem/contentMeta/located/name";
 	private final static String CLASS_XPATH = "/newsItem/itemMeta/@qcode";
 	private final static String HEADLINE_XPATH = "/newsItem/contentMeta/headline";
@@ -134,7 +134,7 @@ public class PackageGenerator {
 				 */
 				
 				//Get name of news item article
-				expr = xpath.compile(NAME_XPATH);
+				expr = xpath.compile(SERVICE_NAME_XPATH);
 				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String name = nodes.item(0).getTextContent();
 				newsItem.setName(name);

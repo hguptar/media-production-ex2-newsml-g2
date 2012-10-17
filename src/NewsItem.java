@@ -12,12 +12,12 @@ public class NewsItem {
 
 	// Unique id of the news item
 	private String guid;
-	// News item version if modiefied and re-send
+	// News item version if modified and re-sent
 	private String version;
 	// Date and time when the latest version was sent to customer
 	private String version_created;
 	private Date version_created_date;
-	// Type of the news item (PÃ¤Ã¤juttu, Kainalo, Tausta...)
+	// Type of the news item (PŠŠjuttu, Kainalo, Tausta...)
 	private String type_role;
 	// Departement
 	private String department;
