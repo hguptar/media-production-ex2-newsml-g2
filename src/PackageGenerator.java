@@ -30,6 +30,7 @@ import org.xml.sax.SAXException;
 public class PackageGenerator {
 	
 	// XPath expressions for retrieving newsItem elements
+
 	private final static String GUID_XPATH = "/newsItem/@guid"; 
 	private final static String VERSION_XPATH = "/newsItem/@version"; 
 	private final static String VERSION_CREATED_XPATH = "/newsItem/itemMeta/versionCreated";
@@ -37,6 +38,8 @@ public class PackageGenerator {
 	private final static String URGENCY_XPATH = "/newsItem/contentMeta/urgency";
 	private final static String DEPARTMENT_XPATH = "/newsItem/contentMeta/subject[@type='cpnat:department']/name";
 	private final static String CATEGORIES_XPATH = "/newsItem/contentMeta/subject[@type='cpnat:category']/name";
+	private final static String NAME_XPATH = "/newsItem/itemMeta/service/name";
+	private final static String LOCATION_XPATH = "/newsItem/contentMeta/located/name";
 	
 	private String newsItemFolder;
 	private ArrayList<NewsItem> newsItems;
@@ -129,9 +132,16 @@ public class PackageGenerator {
 				 */
 				
 				//Get name of news item article
-				expr = xpath.complite(NAME_XPATH);
+				expr = xpath.compile(NAME_XPATH);
 				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String name = nodes.item(0).getTextContent();
+				newsItem.setName(name);
+				
+				//Get location of news item article
+				expr = xpath.compile(LOCATION_XPATH);
+				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
+				String location = nodes.item(0).getTextContent();
+				newsItem.setLocation(location);
 				
 				
 				//Get NewsItem urgency
@@ -207,7 +217,7 @@ public class PackageGenerator {
 	
 	public static void main(String[] args) {
 		PackageGenerator packageGenerator = 
-				new PackageGenerator("path_to_newsitems");
+				new PackageGenerator("/stt_lehtikuva_newsItems");
 	}
 
 	
