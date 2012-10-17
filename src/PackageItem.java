@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 
 public class PackageItem {
@@ -32,8 +31,8 @@ public class PackageItem {
 	/*
 	 * Fields in contentMetadata element
 	 */
-	//...
-	
+	private String headline;
+	private String contributor;
 	
 	/*
 	 * Fields in groupSet element
@@ -47,9 +46,22 @@ public class PackageItem {
 	/*
 	 * Getters and setters
 	 */
-	//...
+	public String getHeadline() {
+	    return headline;
+    }
+
+    public void setHeadline(String headline) {
+        this.headline = headline;
+    }	
 	
-	
+    public String getContributorName() {
+        return contributor;
+    }
+
+    public void setContributorName(String contributor) {
+        this.contributor = contributor;
+    }
+    
 	/*
 	 * Method for adding news items into package
 	 */
@@ -76,4 +88,5 @@ public class PackageItem {
 			this.id = id;
 		}
 	}
+
 }

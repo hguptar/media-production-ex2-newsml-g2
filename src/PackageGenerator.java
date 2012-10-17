@@ -192,7 +192,7 @@ public class PackageGenerator {
 		
 		PackageItem packageItem = new PackageItem();
 		packageItem.setHeadline("Kotimaan Tuoreimmat Uutiset");
-		packageItem.setContributor_name("Henri");
+		packageItem.setContributorName("Henri");
 		
 		for (int i = 0; i < items; i++) {
 			System.out.println("Adding news item " + packageItems.get(i).getGuid() + " (" +
