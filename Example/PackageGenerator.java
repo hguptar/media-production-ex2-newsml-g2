@@ -148,7 +148,7 @@ public class PackageGenerator {
 		// Finds all items from specific department
 		ArrayList<NewsItem> packageItems = new ArrayList<NewsItem>();
 		for (int i = 0; i < newsItems.size(); i++) {
-			NewsItem item = newsItems.get(i);
+			NewsItem item = newsItems.get(i)
 			System.out.println(item.getDepartment());
 			if (item.getDepartment().equals(("Kotimaa"))) { // You can use your own rules here.
 				packageItems.add(item);
