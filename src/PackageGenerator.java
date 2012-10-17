@@ -133,12 +133,13 @@ public class PackageGenerator {
 				expr = xpath.complite(NAME_XPATH);
 				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String name = nodes.item(0).getTextContent();
-				newsItem.
+				
 				
 				//Get NewsItem urgency
 				expr = xpath.compile(URGENCY_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String urgency = nodes.item(0).getTextContent();
+				newsItem.setUrgency(urgency);
 				
 				// Adds current news item to newsItems-list
 				newsItems.add(newsItem);

@@ -23,6 +23,8 @@ public class NewsItem {
 	private String department;
 	// Related categories of the news item
 	private String[] categories;
+	// Urgency of the news item
+	private String urgency;
 
 	// Add more fields here.
 	
@@ -99,6 +101,14 @@ public class NewsItem {
 	/*
 	 * String presentation of the news item.
 	 */
+	
+	public String getUrgency() {
+	    return urgency;
+	}
+	
+	public void setUrgency(String urgency) {
+	    this.urgency = urgency;
+	}
 	
 	@Override
 	public String toString() {
