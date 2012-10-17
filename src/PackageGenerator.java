@@ -41,6 +41,7 @@ public class PackageGenerator {
 	private final static String NAME_XPATH = "/newsItem/itemMeta/service/name";
 	private final static String LOCATION_XPATH = "/newsItem/contentMeta/located/name";
 	private final static String CLASS_XPATH = "/newsItem/itemMeta/@qcode";
+	private final static String HEADLINE_XPATH = "/newsItem/contentMeta/headline";
 	
 	private String newsItemFolder;
 	private ArrayList<NewsItem> newsItems;
@@ -149,6 +150,12 @@ public class PackageGenerator {
 				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String class_ni = nodes.item(0).getTextContent();
 				newsItem.setClassNI(class_ni);
+				
+				//Get headline of news item
+				expr = xpath.compile(HEADLINE_XPATH);
+				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
+				String headline = nodes.item(0).getTextContent();
+				newsItem.setHeadline(headline);
 				
 				
 				//Get NewsItem urgency
