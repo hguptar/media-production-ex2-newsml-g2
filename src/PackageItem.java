@@ -23,9 +23,14 @@ public class PackageItem {
 	private static final String GENERATOR = "NewsML Package Generator of Group 3";
 	
 	/*
-	 * Fields in itemMeta element
-	 */
+     * Fields in packageItem element
+     */
 	private String guid;
+	private String version;
+	
+	/*
+	 * Fields in itemMeta element (ignored firstCreated, pubStatus, profile, edNote, signal and link) 
+	 */
 	private String version_created;
 	private String version_created_date;
 	private String service_name;
@@ -33,7 +38,7 @@ public class PackageItem {
 	
 	
 	/*
-	 * Fields in contentMetadata element
+	 * Fields in contentMeta element
 	 */
 	private String contributor;
 	private String contributor_definition;
@@ -49,12 +54,62 @@ public class PackageItem {
 	}	
 	
 	/*
-	 * Getters and setters
-	 */
+     * Getters and setters for packageItem element
+     */
+	
+	public String getStandard() {
+	    return PackageItem.STANDARD;
+	}
+	
+	public String getStandardVersion() {
+	    return PackageItem.STANDARD_VERSION;
+	}
+	
+	public String getConformance() {
+	    return PackageItem.CONFORMANCE;
+	}
+	
+	public String getXlmns() {
+	    return PackageItem.XMLNS;
+	}
+	
+	public String getXlmnsXsi() {
+	    return PackageItem.XMLNS_XSI;
+	}
+	
+	public String getXsiSchemaLocation() {
+	    return PackageItem.XSI_SCHEMALOCATION;
+	}
+	
+	public String getCatalogRef() {
+	    return PackageItem.CATALOGREF;
+	}
+	
+	public String getGuid() {
+	    return this.guid;
+	}
+	
+	public void setGuid(String guid) {
+	    this.guid = guid;
+	}
+	
+	public String getVersion() {
+	    return this.version;
+	}
+	
+	public void setVersion(String version) {
+	    this.version = version;
+	}
 	
 	
 	/*
-     * Getters and setters for contentMetadata element
+	 * Getters and setters for itemMeta element
+	 */
+	
+	
+	
+	/*
+     * Getters and setters for contentMeta element
      */
 	
 	public String getHeadline() {
