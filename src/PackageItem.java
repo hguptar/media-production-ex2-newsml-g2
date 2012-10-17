@@ -1,4 +1,3 @@
-package aalto.media.newsml;
 
 import java.util.ArrayList;
 

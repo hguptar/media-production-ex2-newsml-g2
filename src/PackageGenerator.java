@@ -1,4 +1,3 @@
-package aalto.media.newsml;
 
 /**
  * PackageGenerator class that includes methods for
@@ -31,6 +30,7 @@ import org.xml.sax.SAXException;
 public class PackageGenerator {
 	
 	// XPath expressions for retrieving newsItem elements
+
 	private final static String GUID_XPATH = "/newsItem/@guid"; 
 	private final static String VERSION_XPATH = "/newsItem/@version"; 
 	private final static String VERSION_CREATED_XPATH = "/newsItem/itemMeta/versionCreated";
@@ -137,7 +137,7 @@ public class PackageGenerator {
 				
 				//Get NewsItem urgency
 				expr = xpath.compile(URGENCY_XPATH);
-				nodes = (NodeList)expr.evauluate(xmlDocument, XPathConstants.NODESET);
+				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String urgency = nodes.item(0).getTextContent();
 				
 				// Adds current news item to newsItems-list
@@ -207,7 +207,7 @@ public class PackageGenerator {
 	
 	public static void main(String[] args) {
 		PackageGenerator packageGenerator = 
-				new PackageGenerator("path_to_newsitems");
+				new PackageGenerator("/stt_lehtikuva_newsItems");
 	}
 
 	
