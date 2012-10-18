@@ -19,7 +19,7 @@ public class NewsItem {
 	private Date version_created_date;
 	// Type of the news item (Paajuttu, Kainalo, Tausta...)
 	private String type_role;
-	// Departement
+	// Department
 	private String department;
 	// Related categories of the news item
 	private String[] categories;
@@ -27,11 +27,11 @@ public class NewsItem {
 	private String urgency;
 	// Name of the service of the news item
 	private String name;
-	//Location of the news item
+	// Location of the news item
 	private String location;
-	//Class of the news item
+	// Class of the news item
 	private String class_ni;
-	//Headline of the news item
+	// Headline of the news item
 	private String headline;
 
 	// Add more fields here.
@@ -117,7 +117,6 @@ public class NewsItem {
 	public void setUrgency(String urgency) {
 	    this.urgency = urgency;
 	}
-	
 	
 	public String getName() {
 		return name;

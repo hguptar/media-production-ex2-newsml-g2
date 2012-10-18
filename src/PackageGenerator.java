@@ -157,7 +157,6 @@ public class PackageGenerator {
 				String headline = nodes.item(0).getTextContent();
 				newsItem.setHeadline(headline);
 				
-				
 				//Get NewsItem urgency
 				expr = xpath.compile(URGENCY_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
@@ -230,8 +229,7 @@ public class PackageGenerator {
 
 	
 	public static void main(String[] args) {
-		PackageGenerator packageGenerator = 
-				new PackageGenerator("/stt_lehtikuva_newsItems");
+		PackageGenerator packageGenerator = new PackageGenerator("../stt_lehtikuva_newsItems");
 	}
 
 	
