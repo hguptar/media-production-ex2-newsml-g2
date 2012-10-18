@@ -64,7 +64,7 @@ public class NewsItem {
 	}
 
 	public void setVersionCreated(String version_created) {
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'H:m:s");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		try {
 			Date date = df.parse(version_created);
 			setVersionCreatedDate(date);

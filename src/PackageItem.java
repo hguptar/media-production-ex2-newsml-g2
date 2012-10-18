@@ -18,18 +18,18 @@ public class PackageItem {
 			"../specification/NewsML-G2_2.9-spec-All-Power.xsd";
 	private static final String CATALOGREF = "http://www.iptc.org/std/catalog/catalog.IPTC-G2-standards_16.xml";
 	
+	/*
+     * Fields in packageItem element
+     */
+    private String guid;
+    private String version;
+	
 	/* 
 	 * Constant fields in itemMeta element
 	 */
 	private static final String ITEMCLASS = "ninat:composite";
 	private static final String PROVIDER = "STT";
 	private static final String GENERATOR = "NewsML Package Generator of Group 3";
-	
-	/*
-     * Fields in packageItem element
-     */
-	private String guid;
-	private String version;
 	
 	/*
 	 * Fields in itemMeta element (ignored firstCreated, pubStatus, profile, edNote, signal and link) 
@@ -53,6 +53,7 @@ public class PackageItem {
 	
 	public PackageItem() {
 		groupItems = new ArrayList<GroupItem>();
+		setPackageMetaData();
 	}	
 	
 	/*
@@ -187,12 +188,30 @@ public class PackageItem {
         this.contributor_definition = definition;
     }
     
+    /*
+     * Method for setting package meta data (should be queried from the user)
+     */
+    public void setPackageMetaData() {
+        this.setGuid("777");
+        this.setVersion("1.0");
+        this.setHeadline("Example headline");
+        this.setContributorName("T-75.4210 - Media Production and Use Processes: Group 3");
+        // Fields in itemMeta element
+        this.setVersionCreated(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date()));
+        this.setServiceName("");
+        this.setTitle("");
+        // Fields in contentMeta element
+        this.setContributorName("");
+        this.setContributorDefinition("");
+        this.setHeadline("");
+    }
+    
 	/*
 	 * Method for adding news items into package
 	 */
 
 	public void addNewsItem(NewsItem newsItem) {
-		// Implement a mechanism for adding new newsitems
+		// Implement a mechanism for adding new news items
 		// use some kind of id generation system
 		
 		

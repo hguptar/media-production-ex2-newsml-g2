@@ -40,7 +40,7 @@ public class PackageGenerator {
 	private final static String CATEGORIES_XPATH = "/newsItem/contentMeta/subject[@type='cpnat:category']/name";
 	private final static String SERVICE_NAME_XPATH = "/newsItem/itemMeta/service/name";
 	private final static String LOCATION_XPATH = "/newsItem/contentMeta/located/name";
-	private final static String CLASS_XPATH = "/newsItem/itemMeta/@qcode";
+	private final static String CLASS_XPATH = "/newsItem/itemMeta/itemClass/@qcode";
 	private final static String HEADLINE_XPATH = "/newsItem/contentMeta/headline";
 	
 	private String newsItemFolder;
@@ -58,7 +58,7 @@ public class PackageGenerator {
 		newsItems = new ArrayList<NewsItem>();
 		
 		// List all file in given folder that ends with '.xml'
-		File[] allNewsItems = new File(newsItemFolder).listFiles(new FileFilter() {
+		File[] allNewsItems = new File(this.newsItemFolder).listFiles(new FileFilter() {
 			
 			@Override
 			public boolean accept(File file) {
@@ -83,9 +83,12 @@ public class PackageGenerator {
 		for (File newsItemFile : allNewsItems) {
 			try {
 				xmlDocument = documentBuilder.parse(newsItemFile);
-			} catch (SAXException | IOException e) {
+			} catch (IOException e) {
 				e.printStackTrace();
-			}
+			} catch (SAXException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 			
 			XPathExpression expr;
 			NodeList nodes;
@@ -190,14 +193,16 @@ public class PackageGenerator {
 		if (newsItems.size() < 10) items = newsItems.size();
 		
 		PackageItem packageItem = new PackageItem();
-		packageItem.setHeadline("Kotimaan Tuoreimmat Uutiset");
-		packageItem.setContributorName("Group 3");
 		
 		for (int i = 0; i < items; i++) {
 			System.out.println("Adding news item " + newsItems.get(i).getGuid() + " (" + newsItems.get(i).getVersionCreated() + ")");
 			packageItem.addNewsItem(newsItems.get(i));
 		}
 		return packageItem;
+	}
+	
+	public PackageItem getPackage() {
+	    return this.packageItem;
 	}
 	
 	public ArrayList<NewsItem> getNewsItemsByDepartment(String department) {
@@ -233,8 +238,8 @@ public class PackageGenerator {
 
 	
 	public static void main(String[] args) {
-		PackageGenerator packageGenerator = new PackageGenerator("../stt_lehtikuva_newsItems");
-		System.out.println(packageGenerator.packageItem.getGuid());
+		PackageGenerator packageGenerator = new PackageGenerator("stt_lehtikuva_newsItems");
+		System.out.println(packageGenerator.getPackage().getVersionCreated());
 	}
 
 	
