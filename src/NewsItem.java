@@ -11,9 +11,9 @@ public class NewsItem {
 	private String version;
 	private String catalog_ref;
 	// See ItemMeta.java
-	private ItemMeta item_meta;
+	private ItemMeta item_meta = new ItemMeta();
    // See ContentMeta.java
-	private ContentMeta content_meta;
+	private ContentMeta content_meta = new ContentMeta();
 	
 	public NewsItem() {};
 	

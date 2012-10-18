@@ -3,11 +3,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+public class ContentMeta {
 
-public class ContentMeta extends NewsItem {
-
-        public ContentMeta() {};
-        
         // Urgency of the news item
         private String urgency;
         // Content created
@@ -17,11 +14,12 @@ public class ContentMeta extends NewsItem {
         private String content_modified;
         private Date content_modified_date;
         private String located;
-        public Subject subject;
+        public Subject subject = new Subject();
         private String by;
-        
         // Headline of the news item
         private String headline;
+        
+        public ContentMeta() {};
         
         public String getUrgency() {
             return urgency;

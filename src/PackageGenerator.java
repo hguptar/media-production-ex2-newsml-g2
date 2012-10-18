@@ -109,8 +109,8 @@ public class PackageGenerator {
 				//Get date and time when current version of the NewsItem was sent
 				expr = xpath.compile(VERSION_CREATED_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
-				String versionCreated = nodes.item(0).getTextContent();
-				newsItem.getItemMeta().setVersionCreated(versionCreated);
+				String version_created = nodes.item(0).getTextContent();
+				newsItem.getItemMeta().setVersionCreated(version_created);
 				
 				//Get type of news item article
 				expr = xpath.compile(TYPE_ROLE_XPATH);

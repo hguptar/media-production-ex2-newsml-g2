@@ -2,9 +2,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ItemMeta extends NewsItem {
-    
-    public ItemMeta() {};
+public class ItemMeta {
     
     // Class of the news item
     private String item_class;
@@ -20,6 +18,8 @@ public class ItemMeta extends NewsItem {
     private String role;
     private String service_code;
     private String service_name;
+    
+    public ItemMeta() {};
     
     public String getItemClass() {
         return item_class;
