@@ -45,11 +45,12 @@ public class PackageGenerator {
 	
 	private String newsItemFolder;
 	private ArrayList<NewsItem> newsItems;
+	private PackageItem packageItem;
 	
 	public PackageGenerator(String newsItemFolder) {
 		this.newsItemFolder = newsItemFolder;
 		listItems();
-		PackageItem packageItem = generatePackage();
+		this.packageItem = generatePackage();
 	}
 	
 	private void listItems() {
@@ -167,7 +168,6 @@ public class PackageGenerator {
 				newsItems.add(newsItem);
 				
 			} catch (XPathExpressionException e) {
-
 				e.printStackTrace();
 			}
 		}
@@ -178,34 +178,38 @@ public class PackageGenerator {
 	 */
 	
 	private PackageItem generatePackage() {
-		// An example for generating packageItem
 
 		// Finds all items from specific department
-		ArrayList<NewsItem> packageItems = new ArrayList<NewsItem>();
-		for (int i = 0; i < newsItems.size(); i++) {
-			NewsItem item = newsItems.get(i);
-			System.out.println(item.getDepartment());
-			if (item.getDepartment().equals(("Kotimaa"))) { // You can use your own rules here.
-				packageItems.add(item);
-			}
-		}
+	    ArrayList<NewsItem> newsItems = getNewsItemsByDepartment("Kotimaa");
+		
 		// Sort items by date (newest first)
-		Collections.sort(packageItems, new NewsItemComparator());
+		Collections.sort(newsItems, new NewsItemComparator());
 		
 		// Creates packageItem containing first 10 items
 		int items = 10;
-		if (packageItems.size() < 10) items = packageItems.size();
+		if (newsItems.size() < 10) items = newsItems.size();
 		
 		PackageItem packageItem = new PackageItem();
 		packageItem.setHeadline("Kotimaan Tuoreimmat Uutiset");
-		packageItem.setContributorName("Henri");
+		packageItem.setContributorName("Group 3");
 		
 		for (int i = 0; i < items; i++) {
-			System.out.println("Adding news item " + packageItems.get(i).getGuid() + " (" +
-				packageItems.get(i).getVersionCreated() + ")");
-			packageItem.addNewsItem(packageItems.get(i));
+			System.out.println("Adding news item " + newsItems.get(i).getGuid() + " (" + newsItems.get(i).getVersionCreated() + ")");
+			packageItem.addNewsItem(newsItems.get(i));
 		}
 		return packageItem;
+	}
+	
+	public ArrayList<NewsItem> getNewsItemsByDepartment(String department) {
+	    ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
+        for (int i = 0; i < newsItems.size(); i++) {
+            NewsItem item = newsItems.get(i);
+            System.out.println(item.getDepartment());
+            if (item.getDepartment().equals(("Kotimaa"))) { // You can use your own rules here.
+                newsItems.add(item);
+            }
+        }
+        return newsItems;
 	}
 
 	/*
@@ -230,6 +234,7 @@ public class PackageGenerator {
 	
 	public static void main(String[] args) {
 		PackageGenerator packageGenerator = new PackageGenerator("../stt_lehtikuva_newsItems");
+		System.out.println(packageGenerator.packageItem.getGuid());
 	}
 
 	
