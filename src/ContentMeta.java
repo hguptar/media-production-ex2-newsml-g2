@@ -118,7 +118,6 @@ public class ContentMeta {
             private String name;
             private String topic;
             private String department;
-            private String size;
             private ArrayList<String> categories;
             
             public Subject() {};
@@ -161,14 +160,6 @@ public class ContentMeta {
             
             public void setDepartment(String department) {
                 this.department = department;
-            }
-            
-            public String getSize() {
-                return this.size;
-            }
-            
-            public void setSize(String size) {
-                this.size = size;
             }
             
             public ArrayList<String> getCategories() {
