@@ -218,7 +218,7 @@ public class PackageItem {
 	    
 	    item_ref.setResidref(newsItem.getGuid());
 	    item_ref.setSize("");
-	    
+	    item_ref.setItemClass(newsItem.)
 	    
 	    group.setItemRef(item_ref);
 	    
@@ -292,7 +292,8 @@ public class PackageItem {
 	}
 	
 	private class ItemRef {
-	    //  itemRef attributes
+	    
+        //  itemRef attributes
 	    private String residref;
 	    private final String content_type = "application/vnd.iptc.g2.newsitem+xml";
 	    private String size;
@@ -300,7 +301,7 @@ public class PackageItem {
 	    private String item_class;
 	    private String provider;
 	    private String version_created;
-	    private String version_created_date;
+	    private Date version_created_date;
 	    private String pub_status;
 	    private String headline;
 	    private String description;
@@ -330,6 +331,62 @@ public class PackageItem {
 	    public void setProvider(String provider) {
 	        this.provider = provider;
 	    }
+	    
+	    public String getItemClass() {
+	        return this.item_class;
+	    }
+	    
+	    public void setItemClass(String item_class) {
+	        this.item_class = item_class;
+	    }
+	    
+	    public String getVersion_created() {
+            return version_created;
+        }
+
+        public void setVersion_created(String version_created) {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            try {
+                Date date = df.parse(version_created);
+                setVersionCreatedDate(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            this.version_created = version_created;
+        }
+
+        public Date getVersionCreatedDate() {
+            return version_created_date;
+        }
+
+        public void setVersionCreatedDate(Date version_created_date) {
+            this.version_created_date = version_created_date;
+        }
+
+        public String getPubStatus() {
+            return pub_status;
+        }
+
+        public void setPubStatus(String pub_status) {
+            this.pub_status = pub_status;
+        }
+
+        public String getHeadline() {
+            return headline;
+        }
+
+        public void setHeadline(String headline) {
+            this.headline = headline;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
 	}
 
 }
