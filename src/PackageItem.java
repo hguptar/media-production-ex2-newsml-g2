@@ -214,7 +214,7 @@ public class PackageItem {
 	    ItemRef item_ref = new ItemRef();
 	    
 	    item_ref.setResidref(newsItem.getGuid());
-	    item_ref.setSize("");
+	    item_ref.setSize(Long.toString(newsItem.getSize()));
 	    item_ref.setItemClass(newsItem.getItemMeta().getItemClass());
 	    item_ref.setProvider(newsItem.getItemMeta().getProvider());
 	    item_ref.setVersion_created(newsItem.getContentMeta().getContentCreated());
