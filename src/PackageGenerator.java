@@ -242,6 +242,7 @@ public class PackageGenerator {
 
             //create the root element (packageItem in our case)
             Element root = this.xmlPackageFile.createElement("packageItem");
+            
             //add all attributes
             root.setAttribute("standard", this.packageItem.getStandard());
             root.setAttribute("standardversion", this.packageItem.getStandardVersion());
@@ -261,11 +262,11 @@ public class PackageGenerator {
             
             //itemMeta elements
             Element itemClass = this.xmlPackageFile.createElement("itemClass");
-            itemClass.setAttribute("qcode", this.packageItem.getItemClass());
+            itemClass.setAttribute("qcode", this.packageItem.getItemMeta().getItemClass());
             Element provider = this.xmlPackageFile.createElement("provider");
-            provider.setAttribute("literal", this.packageItem.getProvider());
+            provider.setAttribute("literal", this.packageItem.getItemMeta().getProvider());
             Element versionCreated = this.xmlPackageFile.createElement("versionCreated");
-            versionCreated.setTextContent(this.packageItem.getVersionCreated());
+            versionCreated.setTextContent(this.packageItem.getItemMeta().getVersionCreated());
             itemMeta.appendChild(itemClass);
             itemMeta.appendChild(provider);
             itemMeta.appendChild(versionCreated);

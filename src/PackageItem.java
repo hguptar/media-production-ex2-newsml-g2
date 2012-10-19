@@ -55,11 +55,10 @@ public class PackageItem {
     private Object getContentMeta;
 	
 	public PackageItem() {
-		groupItems = new ArrayList<GroupItem>();
+	    this.item_meta = new ItemMeta();
+        this.content_meta = new ContentMeta();
+		this.groupItems = new ArrayList<GroupItem>();
 		setPackageMetaData();
-		this.item_meta.setItemClass(ITEMCLASS);
-		this.item_meta.setProvider(PROVIDER);
-		this.item_meta.setGenerator(GENERATOR);
 	}	
 	
 	/*
@@ -132,15 +131,17 @@ public class PackageItem {
     public void setPackageMetaData() {
         this.setGuid("1234-1234-1234-1234");
         this.setVersion("1.0");
-        this.getContentMeta().("T-75.4210 - Media Production and Use Processes: Group 3");
         // Fields in itemMeta element
-        this.setVersionCreated(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date()));
-        this.setServiceName("The latest hottest and funkiest news");
-        this.setTitle("Just news");
+        this.getItemMeta().setItemClass(ITEMCLASS);
+        this.getItemMeta().setProvider(PROVIDER);
+        this.getItemMeta().setGenerator(GENERATOR);
+        this.getItemMeta().setVersionCreated(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date()));
+        this.getItemMeta().setServiceName("The latest hottest and funkiest news");
+        this.getItemMeta().setTitle("Just news");
         // Fields in contentMeta element
-        this.setContributorName("Group 3");
-        this.setContributorDefinition("A group of desperate students");
-        this.setHeadline("Example headline");
+        this.getContentMeta().setContributorName("T-75.4210 - Media Production and Use Processes: Group 3");
+        this.getContentMeta().setContributorDefinition("A group of desperate students");
+        this.getContentMeta().setHeadline("Example headline");
     }
     
 	/*

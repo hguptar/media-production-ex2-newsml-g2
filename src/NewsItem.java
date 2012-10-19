@@ -11,13 +11,16 @@ public class NewsItem {
 	private String version;
 	private String catalog_ref;
 	// See ItemMeta.java
-	private ItemMeta item_meta = new ItemMeta();
+	private ItemMeta item_meta;
    // See ContentMeta.java
 	private ContentMeta content_meta = new ContentMeta();
 	//Size of a news item
 	private long size;
 	
-	public NewsItem() {};
+	public NewsItem() {
+	    this.item_meta = new ItemMeta();
+	    this.content_meta = new ContentMeta();
+	};
 	
 	/*
 	 * Getters and Setter for NewsItem class
