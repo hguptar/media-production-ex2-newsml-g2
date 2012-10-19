@@ -38,6 +38,7 @@ public class PackageItem {
 	private Date version_created_date;
 	private String service_name;
 	private String title;
+	private ItemMeta item_meta;
 	
 	/*
 	 * Fields in contentMeta element
@@ -45,15 +46,20 @@ public class PackageItem {
 	private String contributor;
 	private String contributor_definition;
 	private String headline;
+	private ContentMeta content_meta;
 	
 	/*
 	 * Fields in groupSet element
 	 */
 	private ArrayList<GroupItem> groupItems;
+    private Object getContentMeta;
 	
 	public PackageItem() {
 		groupItems = new ArrayList<GroupItem>();
 		setPackageMetaData();
+		this.item_meta.setItemClass(ITEMCLASS);
+		this.item_meta.setProvider(PROVIDER);
+		this.item_meta.setGenerator(GENERATOR);
 	}	
 	
 	/*
@@ -104,97 +110,29 @@ public class PackageItem {
 	    this.version = version;
 	}
 	
-	
-	/*
-	 * Getters and setters for itemMeta element
-	 */
-	
-	public String getItemClass() {
-	    return PackageItem.ITEMCLASS;
+	public ItemMeta getItemMeta() {
+	    return this.item_meta;
 	}
 	
-	public String getProvider() {
-	    return PackageItem.PROVIDER;
+	public void setItemMeta(ItemMeta item_meta) {
+	    this.item_meta = item_meta;
 	}
 	
-	public String getGenerator() {
-	    return PackageItem.GENERATOR;
-	}
-	
-	public String getVersionCreated() {
-	    return this.version_created;
-	}
-	
-	public void setVersionCreated(String version_created) {
-	    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'H:m:s");
-	    try {
-	        Date date = df.parse(version_created);
-	        setVersionCreatedDate(date);
-	    } catch (ParseException e) {
-            e.printStackTrace();
-        }
-	    this.version_created = version_created;
-	}
-	
-	public Date getVersionCreatedDate() {
-	    return this.version_created_date;
-	}
-	
-	public void setVersionCreatedDate(Date date) {
-	    this.version_created_date = date;
-	}
-	
-	public String getServiceName() {
-	    return this.service_name;
-	}
-	
-	public void setServiceName(String service_name) {
-	    this.service_name = service_name;
-	}
-	
-	public String getTitle() {
-	    return this.title;
-	}
-	
-	public void setTitle(String title) {
-	    this.title = title;
-	}
-	
-	/*
-     * Getters and setters for contentMeta element
-     */
-	
-	public String getHeadline() {
-	    return headline;
+	public ContentMeta getContentMeta() {
+        return this.content_meta;
+    }
+    
+    public void setContentMeta(ContentMeta content_meta) {
+        this.content_meta = content_meta;
     }
 
-    public void setHeadline(String headline) {
-        this.headline = headline;
-    }	
-	
-    public String getContributorName() {
-        return contributor;
-    }
-
-    public void setContributorName(String contributor) {
-        this.contributor = contributor;
-    }
-    
-    public String getContributorDefinition() {
-        return contributor_definition;
-    }
-    
-    public void setContributorDefinition(String definition) {
-        this.contributor_definition = definition;
-    }
-    
     /*
      * Method for setting package meta data (should be queried from the user)
      */
     public void setPackageMetaData() {
         this.setGuid("1234-1234-1234-1234");
         this.setVersion("1.0");
-        this.setContributorName("T-75.4210 - Media Production and Use Processes: Group 3");
+        this.getContentMeta().("T-75.4210 - Media Production and Use Processes: Group 3");
         // Fields in itemMeta element
         this.setVersionCreated(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date()));
         this.setServiceName("The latest hottest and funkiest news");
