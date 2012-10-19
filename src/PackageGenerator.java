@@ -9,6 +9,7 @@
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,14 +17,16 @@ import java.util.Comparator;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.*;
+import javax.xml.transform.stream.*;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 public class PackageGenerator {
@@ -46,10 +49,13 @@ public class PackageGenerator {
 	private ArrayList<NewsItem> newsItems;
 	private PackageItem packageItem;
 	
+	private Document xmlPackageFile;
+	
 	public PackageGenerator(String newsItemFolder) {
 		this.newsItemFolder = newsItemFolder;
 		listItems();
 		this.packageItem = generatePackage();
+		writePackageToFile("package.xml");
 	}
 	
 	private void listItems() {
@@ -217,28 +223,96 @@ public class PackageGenerator {
 	 * Method for storing packageItem as a XML document.
 	 */
 	
-	private void writePackageToFile(PackageItem packageItem, String filePath) {
-			
+	private void writePackageToFile(String filePath) {
+		
+		try {
+            /////////////////////////////
+            //Creating an empty XML Document
+
+            //We need a Document
+            DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
+            this.xmlPackageFile = docBuilder.newDocument();
+
+            ////////////////////////
+            //Creating the XML tree
+
+            //create the root element (packageItem in our case)
+            Element root = this.xmlPackageFile.createElement("packageItem");
+            //add all attributes
+            root.setAttribute("standard", this.packageItem.getStandard());
+            root.setAttribute("standardversion", this.packageItem.getStandardVersion());
+            root.setAttribute("conformance", this.packageItem.getConformance());
+            root.setAttribute("xmlns", this.packageItem.getXlmns());
+            root.setAttribute("xmlns:xsi", this.packageItem.getXlmnsXsi());
+            root.setAttribute("xsi:schemaLocation", this.packageItem.getXsiSchemaLocation());
+            root.setAttribute("guid", this.packageItem.getGuid());
+            this.xmlPackageFile.appendChild(root);
+
+            //create a comment and put it in the root element
+            //Comment comment = this.xmlPackageFile.createComment("Just a thought");
+            //root.appendChild(comment);
+
+            //create child element, add an attribute, and add to root
+            Element itemMeta = this.xmlPackageFile.createElement("itemMeta");
+            Element contentMeta = this.xmlPackageFile.createElement("contentMeta");
+            root.appendChild(itemMeta);
+            root.appendChild(contentMeta);
+            
+            //itemMeta elements
+            Element itemClass = this.xmlPackageFile.createElement("itemClass");
+            itemClass.setAttribute("qcode", this.packageItem.getItemClass());
+            Element provider = this.xmlPackageFile.createElement("provider");
+            provider.setAttribute("literal", this.packageItem.getProvider());
+            Element versionCreated = this.xmlPackageFile.createElement("versionCreated");
+            versionCreated.setTextContent(this.packageItem.getVersionCreated());
+            itemMeta.appendChild(itemClass);
+            itemMeta.appendChild(provider);
+            itemMeta.appendChild(versionCreated);
+            
+
+            /////////////////
+            //Output the XML
+
+            //set up a transformer
+            TransformerFactory transfac = TransformerFactory.newInstance();
+            Transformer trans = transfac.newTransformer();
+            trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            trans.setOutputProperty(OutputKeys.INDENT, "yes");
+
+            //create string from xml tree
+            StringWriter sw = new StringWriter();
+            StreamResult result = new StreamResult(sw);
+            DOMSource source = new DOMSource(this.xmlPackageFile);
+            trans.transform(source, result);
+            String xmlString = sw.toString();
+
+            //print xml
+            System.out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + xmlString);
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 	}
 	
 	/**
 	 * Comparator class for sorting NewsItems by date they were sent to customers.
 	 */
 	
-	/*private class NewsItemComparator implements Comparator<NewsItem>{
+	private class NewsItemComparator implements Comparator<NewsItem>{
 		@Override
 		public int compare(NewsItem item1, NewsItem item2) {
 			return item1.getItemMeta().getVersionCreatedDate().compareTo(item2.getItemMeta().getVersionCreatedDate());
 		}
-	}*/
+	}
 
 	
 	/*
      * Main method
      */
 	public static void main(String[] args) {
-		PackageGenerator packageGenerator = new PackageGenerator("stt_lehtikuva_newsItems");
-		System.out.println(packageGenerator.getPackage().getVersionCreated());
+		PackageGenerator packageGenerator = new PackageGenerator("./stt_lehtikuva_newsItems");
+		//System.out.println(packageGenerator.getPackage().getVersionCreated());
 	}
 
 	

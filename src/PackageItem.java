@@ -51,7 +51,6 @@ public class PackageItem {
 	 */
 	private ArrayList<GroupItem> groupItems;
 	
-	
 	public PackageItem() {
 		groupItems = new ArrayList<GroupItem>();
 		setPackageMetaData();
@@ -214,8 +213,6 @@ public class PackageItem {
 	public void addNewsItem(NewsItem newsItem) {
 		// Implement a mechanism for adding new news items
 		// use some kind of id generation system
-		
-		
 	}
 
 	private class GroupItem {
