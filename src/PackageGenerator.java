@@ -44,23 +44,20 @@ public class PackageGenerator {
 	
 	private String newsItemFolder;
 	private ArrayList<NewsItem> newsItems;
+	private PackageItem packageItem;
 	
 	public PackageGenerator(String newsItemFolder) {
 		this.newsItemFolder = newsItemFolder;
-		this.listItems();
-		PackageItem packageItem = generatePackage();
-	}
-	
-	public static void main(String[] args) {
-		PackageGenerator packageGenerator = new PackageGenerator("./stt_lehtikuva_newsItems");
+		listItems();
+		this.packageItem = generatePackage();
 	}
 	
 	private void listItems() {
 		
 		this.newsItems = new ArrayList<NewsItem>();
 		
-		// List all file in given folder that ends with '.xml'
-		File[] allNewsItems = new File(newsItemFolder).listFiles(new FileFilter() {
+		// List all the files that end with '.xml' in the given folder
+		File[] allNewsItems = new File(this.newsItemFolder).listFiles(new FileFilter() {
 			
 			@Override
 			public boolean accept(File file) {
@@ -85,14 +82,12 @@ public class PackageGenerator {
 			
 			try {
 				xmlDocument = documentBuilder.parse(newsItemFile);
-			} catch (SAXException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-				
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (SAXException e) {
+                e.printStackTrace();
+            }
+		
 			XPathExpression expr;
 			NodeList nodes;
 			
@@ -113,67 +108,65 @@ public class PackageGenerator {
 				//Get date and time when current version of the NewsItem was sent
 				expr = xpath.compile(VERSION_CREATED_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
-				String versionCreated = nodes.item(0).getTextContent();
-				newsItem.setVersionCreated(versionCreated);
+				String version_created = nodes.item(0).getTextContent();
+				newsItem.getItemMeta().setVersionCreated(version_created);
 				
 				//Get type of news item article
 				expr = xpath.compile(TYPE_ROLE_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
-				String typeRole = nodes.item(0).getTextContent();
-				newsItem.setTypeRole(typeRole);
+				String role = nodes.item(0).getTextContent();
+				newsItem.getItemMeta().setRole(role);
 				
 				expr = xpath.compile(DEPARTMENT_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String department = nodes.item(0).getTextContent();
-				newsItem.setDepartment(department);
+				newsItem.getContentMeta().getSubject().setDepartment(department);
 				
 				//Get NewsItem categories
 				expr = xpath.compile(CATEGORIES_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
-				String[] categories = new String[nodes.getLength()];
+				ArrayList<String> categories = new ArrayList<String>();
 				for (int i = 0; i < nodes.getLength(); i++) {
-					categories[i] = nodes.item(i).getTextContent();
+					categories.add(nodes.item(i).getTextContent());
 				}
-				newsItem.setCategories(categories);
+				newsItem.getContentMeta().getSubject().setCategories(categories);
 				
 
 				
 				//Get name of news item article
 				expr = xpath.compile(SERVICE_NAME_XPATH);
 				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
-				String name = nodes.item(0).getTextContent();
-				newsItem.setName(name);
+				String service_name = nodes.item(0).getTextContent();
+				newsItem.getItemMeta().setServiceName(service_name);
 				
 				//Get location of news item article
 				expr = xpath.compile(LOCATION_XPATH);
 				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String location = nodes.item(0).getTextContent();
-				newsItem.setLocation(location);
+				newsItem.getContentMeta().setLocation(location);
 				
 				//Get the class of news item
 				expr = xpath.compile(CLASS_XPATH);
 				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
-				String class_ni = nodes.item(0).getTextContent();
-				newsItem.setClassNI(class_ni);
+				String item_class = nodes.item(0).getTextContent();
+				newsItem.getItemMeta().setItemClass(item_class);
 				
 				//Get headline of news item
 				expr = xpath.compile(HEADLINE_XPATH);
 				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String headline = nodes.item(0).getTextContent();
-				newsItem.setHeadline(headline);
-				
+				newsItem.getContentMeta().setHeadline(headline);
 				
 				//Get NewsItem urgency
 				expr = xpath.compile(URGENCY_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String urgency = nodes.item(0).getTextContent();
-				newsItem.setUrgency(urgency);
+				newsItem.getContentMeta().setUrgency(urgency);
 				
 				// Adds current news item to newsItems-list
 				newsItems.add(newsItem);
 				
 			} catch (XPathExpressionException e) {
-
 				e.printStackTrace();
 			}
 		}
@@ -184,34 +177,40 @@ public class PackageGenerator {
 	 */
 	
 	private PackageItem generatePackage() {
-		// An example for generating packageItem
 
 		// Finds all items from specific department
-		ArrayList<NewsItem> packageItems = new ArrayList<NewsItem>();
-		for (int i = 0; i < newsItems.size(); i++) {
-			NewsItem item = newsItems.get(i);
-			System.out.println(item.getDepartment());
-			if (item.getDepartment().equals(("Kotimaa"))) { // You can use your own rules here.
-				packageItems.add(item);
-			}
-		}
-		// Sort items by date (newest first)
+	    ArrayList<NewsItem> newsItems = getNewsItemsByDepartment("Kotimaa");
+		
 		//Collections.sort(packageItems, new NewsItemComparator());
+		Collections.sort(newsItems, new NewsItemComparator());
 		
 		// Creates packageItem containing first 10 items
 		int items = 10;
-		if (packageItems.size() < 10) items = packageItems.size();
+		if (newsItems.size() < 10) items = newsItems.size();
 		
 		PackageItem packageItem = new PackageItem();
-		packageItem.setHeadline("Kotimaan Tuoreimmat Uutiset");
-		packageItem.setContributorName("Henri");
 		
 		for (int i = 0; i < items; i++) {
-			System.out.println("Adding news item " + packageItems.get(i).getGuid() + " (" +
-				packageItems.get(i).getVersionCreated() + ")");
-			packageItem.addNewsItem(packageItems.get(i));
+			System.out.println("Adding news item " + newsItems.get(i).getGuid() + " (" + newsItems.get(i).getItemMeta().getVersionCreated() + ")");
+			packageItem.addNewsItem(newsItems.get(i));
 		}
 		return packageItem;
+	}
+	
+	public PackageItem getPackage() {
+	    return this.packageItem;
+	}
+	
+	public ArrayList<NewsItem> getNewsItemsByDepartment(String department) {
+	    ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
+        for (int i = 0; i < newsItems.size(); i++) {
+            NewsItem item = newsItems.get(i);
+            System.out.println(item.getContentMeta().getSubject().getDepartment());
+            if (item.getContentMeta().getSubject().getDepartment().equals(department)) { // You can use your own rules here.
+                newsItems.add(item);
+            }
+        }
+        return newsItems;
 	}
 
 	/*
@@ -229,12 +228,18 @@ public class PackageGenerator {
 	/*private class NewsItemComparator implements Comparator<NewsItem>{
 		@Override
 		public int compare(NewsItem item1, NewsItem item2) {
-			return item1.getVersionCreatedDate().compareTo(item2.getVersionCreatedDate());
+			return item1.getItemMeta().getVersionCreatedDate().compareTo(item2.getItemMeta().getVersionCreatedDate());
 		}
 	}*/
 
 	
-	
+	/*
+     * Main method
+     */
+	public static void main(String[] args) {
+		PackageGenerator packageGenerator = new PackageGenerator("stt_lehtikuva_newsItems");
+		System.out.println(packageGenerator.getPackage().getVersionCreated());
+	}
 
 	
 	
