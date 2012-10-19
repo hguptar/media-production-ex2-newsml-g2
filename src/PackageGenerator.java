@@ -1,4 +1,3 @@
-
 /**
  * PackageGenerator class that includes methods for
  * listing files in folder and reading XML documents, and
@@ -40,7 +39,7 @@ public class PackageGenerator {
 	private final static String CATEGORIES_XPATH = "/newsItem/contentMeta/subject[@type='cpnat:category']/name";
 	private final static String SERVICE_NAME_XPATH = "/newsItem/itemMeta/service/name";
 	private final static String LOCATION_XPATH = "/newsItem/contentMeta/located/name";
-	private final static String CLASS_XPATH = "/newsItem/itemMeta/@qcode";
+	private final static String CLASS_XPATH = "/newsItem/itemMeta/itemClass/@qcode";
 	private final static String HEADLINE_XPATH = "/newsItem/contentMeta/headline";
 	
 	private String newsItemFolder;
@@ -48,13 +47,17 @@ public class PackageGenerator {
 	
 	public PackageGenerator(String newsItemFolder) {
 		this.newsItemFolder = newsItemFolder;
-		listItems();
+		this.listItems();
 		PackageItem packageItem = generatePackage();
+	}
+	
+	public static void main(String[] args) {
+		PackageGenerator packageGenerator = new PackageGenerator("./stt_lehtikuva_newsItems");
 	}
 	
 	private void listItems() {
 		
-		newsItems = new ArrayList<NewsItem>();
+		this.newsItems = new ArrayList<NewsItem>();
 		
 		// List all file in given folder that ends with '.xml'
 		File[] allNewsItems = new File(newsItemFolder).listFiles(new FileFilter() {
@@ -75,17 +78,21 @@ public class PackageGenerator {
 			e.printStackTrace();
 		}
 
-
 		// Reads all the XML documents listed
 		Document xmlDocument = null;
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		for (File newsItemFile : allNewsItems) {
+			
 			try {
 				xmlDocument = documentBuilder.parse(newsItemFile);
-			} catch (SAXException | IOException e) {
-				e.printStackTrace();
+			} catch (SAXException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-			
+				
 			XPathExpression expr;
 			NodeList nodes;
 			
@@ -129,9 +136,7 @@ public class PackageGenerator {
 				}
 				newsItem.setCategories(categories);
 				
-				/*
-				 * Add your own code here, e.g. rest of the needed elements from newsItem.
-				 */
+
 				
 				//Get name of news item article
 				expr = xpath.compile(SERVICE_NAME_XPATH);
@@ -191,7 +196,7 @@ public class PackageGenerator {
 			}
 		}
 		// Sort items by date (newest first)
-		Collections.sort(packageItems, new NewsItemComparator());
+		//Collections.sort(packageItems, new NewsItemComparator());
 		
 		// Creates packageItem containing first 10 items
 		int items = 10;
@@ -221,18 +226,15 @@ public class PackageGenerator {
 	 * Comparator class for sorting NewsItems by date they were sent to customers.
 	 */
 	
-	private class NewsItemComparator implements Comparator<NewsItem>{
+	/*private class NewsItemComparator implements Comparator<NewsItem>{
 		@Override
 		public int compare(NewsItem item1, NewsItem item2) {
 			return item1.getVersionCreatedDate().compareTo(item2.getVersionCreatedDate());
 		}
-	}
+	}*/
 
 	
-	public static void main(String[] args) {
-		PackageGenerator packageGenerator = 
-				new PackageGenerator("/stt_lehtikuva_newsItems");
-	}
+	
 
 	
 	
