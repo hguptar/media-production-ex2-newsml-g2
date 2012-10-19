@@ -213,6 +213,16 @@ public class PackageItem {
 	public void addNewsItem(NewsItem newsItem) {
 		// Implement a mechanism for adding new news items
 		// use some kind of id generation system
+	    GroupItem group = new GroupItem();
+	    ItemRef item_ref = new ItemRef();
+	    
+	    item_ref.setResidref(newsItem.getGuid());
+	    item_ref.setSize(newsItem.getContentMeta().getSubject().getSize());
+	    
+	    group.setItemRef(item_ref);
+	    
+		this.groupItems.add(group);
+		
 	}
 
 	private class GroupItem {
@@ -283,7 +293,7 @@ public class PackageItem {
 	private class ItemRef {
 	    //  itemRef attributes
 	    private String residref;
-	    private String content_type;
+	    private final String content_type = "application/vnd.iptc.g2.newsitem+xml";
 	    private String size;
 	    // itemRef child elements
 	    private String item_class;
@@ -295,6 +305,22 @@ public class PackageItem {
 	    private String description;
 	    
 	    public ItemRef() {};
+	    
+	    public String getResidref() {
+	        return this.residref;
+	    }
+	    
+	    public void setResidref(String residref) {
+	        this.residref = residref;
+	    }
+	    
+	    public String getSize() {
+            return this.size;
+        }
+        
+        public void setSize(String size) {
+            this.size = size;
+        }
 	    
 	    public String getProvider() {
 	        return this.provider;
