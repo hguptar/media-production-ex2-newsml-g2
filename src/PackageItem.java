@@ -192,18 +192,17 @@ public class PackageItem {
      * Method for setting package meta data (should be queried from the user)
      */
     public void setPackageMetaData() {
-        this.setGuid("777");
+        this.setGuid("1234-1234-1234-1234");
         this.setVersion("1.0");
-        this.setHeadline("Example headline");
         this.setContributorName("T-75.4210 - Media Production and Use Processes: Group 3");
         // Fields in itemMeta element
         this.setVersionCreated(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date()));
-        this.setServiceName("");
-        this.setTitle("");
+        this.setServiceName("The latest hottest and funkiest news");
+        this.setTitle("Just news");
         // Fields in contentMeta element
-        this.setContributorName("");
-        this.setContributorDefinition("");
-        this.setHeadline("");
+        this.setContributorName("Group 3");
+        this.setContributorDefinition("A group of desperate students");
+        this.setHeadline("Example headline");
     }
     
 	/*
@@ -211,26 +210,30 @@ public class PackageItem {
 	 */
 
 	public void addNewsItem(NewsItem newsItem) {
-		// Implement a mechanism for adding new news items
-		// use some kind of id generation system
 	    GroupItem group = new GroupItem();
 	    ItemRef item_ref = new ItemRef();
 	    
 	    item_ref.setResidref(newsItem.getGuid());
 	    item_ref.setSize("");
-	    item_ref.setItemClass(newsItem.)
+	    item_ref.setItemClass(newsItem.getItemMeta().getItemClass());
+	    item_ref.setProvider(newsItem.getItemMeta().getProvider());
+	    item_ref.setVersion_created(newsItem.getContentMeta().getContentCreated());
+	    item_ref.setPubStatus(newsItem.getItemMeta().getPubStatus());
+	    item_ref.setHeadline(newsItem.getContentMeta().getHeadline());
+	    item_ref.setDescription(newsItem.getContentMeta().getDescription());
 	    
+	    group.setId("G"+Integer.toString(this.groupItems.size()+1));
+	    group.setRole("group:package");
 	    group.setItemRef(item_ref);
 	    
 		this.groupItems.add(group);
-		
 	}
 
 	private class GroupItem {
 	    // group item attributes
 		private String id;
 		private String role;
-		private String mode;
+		private final String mode = "pgrmode:seq";
 		private ArrayList<GroupRef> group_refs;
 		private ArrayList<ItemRef> item_refs;
 
@@ -256,9 +259,7 @@ public class PackageItem {
 		    return this.mode;
 		}
 		
-		public void setMode(String mode) {
-		    this.mode = mode;
-		}
+		public void setMode(String mode) {}
 		
 		public ArrayList<GroupRef> getGroupRef() {
 		    return this.group_refs;

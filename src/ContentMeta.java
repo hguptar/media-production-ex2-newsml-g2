@@ -16,6 +16,7 @@ public class ContentMeta {
         private String located;
         public Subject subject = new Subject();
         private String by;
+        private String description;
         // Headline of the news item
         private String headline;
         
@@ -97,6 +98,14 @@ public class ContentMeta {
         
         public void setBy(String by) {
             this.by = by;
+        }
+        
+        public String getDescription() {
+            return description;
+        }
+    
+        public void setDescription(String description) {
+            this.description = description;
         }
         
         public String getHeadline() {
