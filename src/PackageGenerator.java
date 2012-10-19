@@ -169,6 +169,9 @@ public class PackageGenerator {
 				String urgency = nodes.item(0).getTextContent();
 				newsItem.getContentMeta().setUrgency(urgency);
 				
+				
+				newsItem.setSize(newsItemFile.getTotalSpace());
+				
 				// Adds current news item to newsItems-list
 				newsItems.add(newsItem);
 				
@@ -249,9 +252,6 @@ public class PackageGenerator {
             root.setAttribute("guid", this.packageItem.getGuid());
             this.xmlPackageFile.appendChild(root);
 
-            //create a comment and put it in the root element
-            //Comment comment = this.xmlPackageFile.createComment("Just a thought");
-            //root.appendChild(comment);
 
             //create child element, add an attribute, and add to root
             Element itemMeta = this.xmlPackageFile.createElement("itemMeta");
@@ -269,6 +269,7 @@ public class PackageGenerator {
             itemMeta.appendChild(itemClass);
             itemMeta.appendChild(provider);
             itemMeta.appendChild(versionCreated);
+            
             
 
             /////////////////
@@ -314,7 +315,4 @@ public class PackageGenerator {
 		PackageGenerator packageGenerator = new PackageGenerator("./stt_lehtikuva_newsItems");
 		//System.out.println(packageGenerator.getPackage().getVersionCreated());
 	}
-
-	
-	
 }

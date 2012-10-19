@@ -14,6 +14,8 @@ public class NewsItem {
 	private ItemMeta item_meta = new ItemMeta();
    // See ContentMeta.java
 	private ContentMeta content_meta = new ContentMeta();
+	//Size of a news item
+	private long size;
 	
 	public NewsItem() {};
 	
@@ -21,11 +23,18 @@ public class NewsItem {
 	 * Getters and Setter for NewsItem class
 	 * 
 	 */
-
+	public long getSize() {
+		return size;
+	}
+	
+	public void setSize(long size) {
+		this.size = size;
+	}
+	
 	public String getGuid() {
 		return guid;
 	}
-
+	
 	public void setGuid(String guid) {
 		this.guid = guid;
 	}
