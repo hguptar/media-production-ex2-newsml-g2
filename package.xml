@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packageItem xmlns="http://iptc.org/std/nar/2006-10-01/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" conformance="power" guid="" standard="NewsML-G2" standardversion="2.8" xsi:schemaLocation="http://iptc.org/std/nar/2006-10-01/../specification/NewsML-G2_2.9-spec-All-Power.xsd">
+<itemMeta>
+<itemClass qcode="ninat:composite"/>
+<provider literal="Aalto University Group Media"/>
+<versionCreated>Mon Oct 22 02:49:22 EEST 2012</versionCreated>
+<firstCreated>Mon Oct 22 02:49:22 EEST 2012</firstCreated>
+<pubStatus qcode="stat:usable"/>
+<generator versioninfo="1.0">Package Generator v1</generator>
+<profile versioninfo="1.0">ranked_idref_list</profile>
+<service qcode="svc:aaltotop">
+<name>Aalto University</name>
+</service>
+<title>MY PACKAGE</title>
+<edNote>DEFINE A NOTE</edNote>
+<signal qcode="act:replacePrev"/>
+<link rel="NO TAG" residref="irel:previousVersion" version="1"/>
+</itemMeta>
+<contentMeta>
+<contributor jobtitle="staffjobs:cpe" qcode="mystaff:MAndre">
+<name>Maxime Andre</name>
+<name>Chief Packaging Editor</name>
+<definition validto="2013-12-31T17:30:00Z">Duty Packaging Editor</definition>
+<note validto="2013-12-31T17:30:00Z">Available everyday</note>
+</contributor>
+<headline xml:lang=""/>
+</contentMeta>
+<groupSet root="root">
+<group id="root" role="group:root">
+<groupRef idref="G2"/>
+</group>
+<group id="G2" role="group:package">
+<itemRef contenttype="application/vnd.iptc.g2.newsitem+xml" residred="urn:newsml:stt.fi:20120727:95867413" size="256053866496">
+<itemClass qcode="ninat:text"/>
+<provider literal=""/>
+<versionCreated/>
+<pubStatus qcode=""/>
+<headline>Fantasia elävöittää roolipelitapahtumaa Espoossa</headline>
+</itemRef>
+<itemRef contenttype="application/vnd.iptc.g2.newsitem+xml" residred="urn:newsml:stt.fi:20120727:95868297" size="256053866496">
+<itemClass qcode="ninat:text"/>
+<provider literal=""/>
+<versionCreated/>
+<pubStatus qcode=""/>
+<headline>Ravintolalaiva on täyttynyt vedellä Turussa</headline>
+</itemRef>
+<itemRef contenttype="application/vnd.iptc.g2.newsitem+xml" residred="urn:newsml:stt.fi:20120728:95868505" size="256053866496">
+<itemClass qcode="ninat:text"/>
+<provider literal=""/>
+<versionCreated/>
+<pubStatus qcode=""/>
+<headline>Mies hukkui Naantalissa</headline>
+</itemRef>
+<itemRef contenttype="application/vnd.iptc.g2.newsitem+xml" residred="urn:newsml:stt.fi:20120728:95868568" size="256053866496">
+<itemClass qcode="ninat:text"/>
+<provider literal=""/>
+<versionCreated/>
+<pubStatus qcode=""/>
+<headline>Turkulainen ravintolalaiva oli vaarassa kellahtaa nurin</headline>
+</itemRef>
+<itemRef contenttype="application/vnd.iptc.g2.newsitem+xml" residred="urn:newsml:stt.fi:20120728:95868629" size="256053866496">
+<itemClass qcode="ninat:text"/>
+<provider literal=""/>
+<versionCreated/>
+<pubStatus qcode=""/>
+<headline>Veneilijä hukkui Haminassa</headline>
+</itemRef>
+<itemRef contenttype="application/vnd.iptc.g2.newsitem+xml" residred="urn:newsml:stt.fi:20120728:95860974" size="256053866496">
+<itemClass qcode="ninat:text"/>
+<provider literal=""/>
+<versionCreated/>
+<pubStatus qcode=""/>
+<headline>C-hepatiittia eniten nuorilla aikuisilla</headline>
+</itemRef>
+<itemRef contenttype="application/vnd.iptc.g2.newsitem+xml" residred="urn:newsml:stt.fi:20120728:95849148" size="256053866496">
+<itemClass qcode="ninat:text"/>
+<provider literal=""/>
+<versionCreated/>
+<pubStatus qcode=""/>
+<headline>Airsoft kasvattaa suosiotaan</headline>
+</itemRef>
+<itemRef contenttype="application/vnd.iptc.g2.newsitem+xml" residred="urn:newsml:stt.fi:20120728:95849123" size="256053866496">
+<itemClass qcode="ninat:text"/>
+<provider literal=""/>
+<versionCreated/>
+<pubStatus qcode=""/>
+<headline>Historian tutkiminen houkuttelee airsoft-harrastajia</headline>
+</itemRef>
+<itemRef contenttype="application/vnd.iptc.g2.newsitem+xml" residred="urn:newsml:stt.fi:20120728:95857894" size="256053866496">
+<itemClass qcode="ninat:text"/>
+<provider literal=""/>
+<versionCreated/>
+<pubStatus qcode=""/>
+<headline>Pohjavesien pinnat tavallista korkeammalla</headline>
+</itemRef>
+<itemRef contenttype="application/vnd.iptc.g2.newsitem+xml" residred="urn:newsml:stt.fi:20120728:95868954" size="256053866496">
+<itemClass qcode="ninat:text"/>
+<provider literal=""/>
+<versionCreated/>
+<pubStatus qcode=""/>
+<headline>HS: Ohjuskaupan sotku johtui Pentagonin virheestä</headline>
+</itemRef>
+</group>
+</groupSet>
+</packageItem>
+

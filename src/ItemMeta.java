@@ -18,6 +18,9 @@ public class ItemMeta {
     private String role;
     private String service_code;
     private String service_name;
+    // PackageItem specific elements
+    private String generator;
+    private String title;
     
     public ItemMeta() {};
     
@@ -113,5 +116,21 @@ public class ItemMeta {
     
     public void setServiceName(String service_name) {
         this.service_name = service_name;
+    }
+    
+    public String getGenerator() {
+        return this.generator;
+    }
+
+    public void setGenerator(String generator) {
+        this.generator = generator;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+    
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

@@ -40,6 +40,7 @@ public class PackageItem {
 	 */
 	private String root;
 	private ArrayList<GroupItem> groupItems;
+    private Object getContentMeta;
 	
 	public PackageItem() {
 		groupItems = new ArrayList<GroupItem>();
@@ -128,8 +129,6 @@ public class PackageItem {
 			group.setId(groupId);
 		}
 		
-		System.out.print(groupRef);
-		
 		if(!groupRef.equals("")) {
 			GroupRef group_ref = new GroupRef();
 			group_ref.setId(group.getId());
@@ -145,7 +144,6 @@ public class PackageItem {
 		
 	public GroupItem getGroupById(String id) {
 		for (GroupItem group : this.groupItems) {
-			System.out.print(group.getId() + " " + id);
 			if(group.getId().equals(id)) {
 				return group;
 			}
@@ -168,7 +166,7 @@ public class PackageItem {
 	    ItemRef item_ref = new ItemRef();
 	    
 	    item_ref.setResidref(newsItem.getGuid());
-	    item_ref.setSize("");
+	    item_ref.setSize(Long.toString(newsItem.getSize()));
 	    item_ref.setItemClass(newsItem.getItemMeta().getItemClass());
 	    item_ref.setProvider(newsItem.getItemMeta().getProvider());
 	    item_ref.setVersion_created(newsItem.getContentMeta().getContentCreated());

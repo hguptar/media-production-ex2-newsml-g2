@@ -296,7 +296,6 @@ public class PackageGenerator {
 	    ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
         for (int i = 0; i < this.newsItems.size(); i++) {
             NewsItem item = this.newsItems.get(i);
-            System.out.println(item.getContentMeta().getSubject().getDepartment());
             if (item.getContentMeta().getSubject().getDepartment().equals(department)) {
                 newsItems.add(item);
             }
@@ -308,7 +307,6 @@ public class PackageGenerator {
 		ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
         for (int i = 0; i < this.newsItems.size(); i++) {
             NewsItem item = this.newsItems.get(i);
-            System.out.println(item.getItemMeta().getRole());
             if (item.getItemMeta().getRole().equals(role)) {
                 newsItems.add(item);
             }
@@ -320,7 +318,6 @@ public class PackageGenerator {
 		ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
         for (int i = 0; i < this.newsItems.size(); i++) {
             NewsItem item = this.newsItems.get(i);
-            System.out.println(item.getItemMeta().getItemClass());
             if (item.getItemMeta().getItemClass().equals(classItem)) {
                 newsItems.add(item);
             }
@@ -332,7 +329,6 @@ public class PackageGenerator {
 		ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
         for (int i = 0; i < this.newsItems.size(); i++) {
             NewsItem item = this.newsItems.get(i);
-            System.out.println(item.getContentMeta().getUrgency());
             if (item.getContentMeta().getUrgency().equals(urgency)) {
                 newsItems.add(item);
             }
@@ -344,7 +340,6 @@ public class PackageGenerator {
 		ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
         for (int i = 0; i < this.newsItems.size(); i++) {
             NewsItem item = this.newsItems.get(i);
-            System.out.println(item.getContentMeta().getHeadline());
             if (item.getContentMeta().getHeadline().equals(headline)) {
                 newsItems.add(item);
             }
@@ -357,7 +352,6 @@ public class PackageGenerator {
 		boolean addedItem = false;
         for (int i = 0; i < this.newsItems.size(); i++) {
             NewsItem item = this.newsItems.get(i);
-            //System.out.println(item.getContentMeta().getHeadline());
             for(String cat : item.getContentMeta().getSubject().getCategories()) {
 	            if (cat.equals(category) && addedItem == false) {
 	                newsItems.add(item);
@@ -386,6 +380,7 @@ public class PackageGenerator {
 
             //create the root element (packageItem in our case)
             Element root = this.xmlPackageFile.createElement("packageItem");
+            
             //add all attributes
             root.setAttribute("standard", this.packageItem.getStandard());
             root.setAttribute("standardversion", this.packageItem.getStandardVersion());
@@ -405,7 +400,6 @@ public class PackageGenerator {
             root.appendChild(itemMeta);
             root.appendChild(contentMeta);
             root.appendChild(groupSet);            
-            
             
             /////////////////
             //Output the XML
