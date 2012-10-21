@@ -27,38 +27,37 @@ public class PackageItem {
 	/* 
 	 * Constant fields in itemMeta element
 	 */
-	private static final String ITEMCLASS = "ninat:composite";
-	private static final String PROVIDER = "STT";
-	private static final String GENERATOR = "NewsML Package Generator of Group 3";
+    private ItemMetaPackage itemMeta;
 	
-	/*
-	 * Fields in itemMeta element (ignored firstCreated, pubStatus, profile, edNote, signal and link) 
-	 */
-	private String version_created;
-	private Date version_created_date;
-	private String service_name;
-	private String title;
-	
+
 	/*
 	 * Fields in contentMeta element
 	 */
-	private String contributor;
-	private String contributor_definition;
-	private String headline;
+	private ContentMetaPackage contentMeta;
 	
 	/*
 	 * Fields in groupSet element
 	 */
+	private String root;
 	private ArrayList<GroupItem> groupItems;
 	
 	public PackageItem() {
 		groupItems = new ArrayList<GroupItem>();
-		setPackageMetaData();
+		itemMeta = new ItemMetaPackage();
+		contentMeta = new ContentMetaPackage();
 	}	
 	
 	/*
      * Getters and setters for packageItem element
      */
+	
+	public ItemMetaPackage getItemMeta() {
+		return this.itemMeta;
+	}
+	
+	public ContentMetaPackage getContentMeta() {
+		return this.contentMeta;
+	}
 	
 	public String getStandard() {
 	    return PackageItem.STANDARD;
@@ -104,113 +103,68 @@ public class PackageItem {
 	    this.version = version;
 	}
 	
-	
-	/*
-	 * Getters and setters for itemMeta element
-	 */
-	
-	public String getItemClass() {
-	    return PackageItem.ITEMCLASS;
+	public String getRoot() {
+		return this.root;
 	}
 	
-	public String getProvider() {
-	    return PackageItem.PROVIDER;
+	public void setRoot(String root) {
+		this.root = root;
 	}
 	
-	public String getGenerator() {
-	    return PackageItem.GENERATOR;
+	public ArrayList<GroupItem> getGroupItems() {
+		return this.groupItems;
 	}
-	
-	public String getVersionCreated() {
-	    return this.version_created;
-	}
-	
-	public void setVersionCreated(String version_created) {
-	    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'H:m:s");
-	    try {
-	        Date date = df.parse(version_created);
-	        setVersionCreatedDate(date);
-	    } catch (ParseException e) {
-            e.printStackTrace();
-        }
-	    this.version_created = version_created;
-	}
-	
-	public Date getVersionCreatedDate() {
-	    return this.version_created_date;
-	}
-	
-	public void setVersionCreatedDate(Date date) {
-	    this.version_created_date = date;
-	}
-	
-	public String getServiceName() {
-	    return this.service_name;
-	}
-	
-	public void setServiceName(String service_name) {
-	    this.service_name = service_name;
-	}
-	
-	public String getTitle() {
-	    return this.title;
-	}
-	
-	public void setTitle(String title) {
-	    this.title = title;
-	}
-	
-	/*
-     * Getters and setters for contentMeta element
-     */
-	
-	public String getHeadline() {
-	    return headline;
-    }
-
-    public void setHeadline(String headline) {
-        this.headline = headline;
-    }	
-	
-    public String getContributorName() {
-        return contributor;
-    }
-
-    public void setContributorName(String contributor) {
-        this.contributor = contributor;
-    }
-    
-    public String getContributorDefinition() {
-        return contributor_definition;
-    }
-    
-    public void setContributorDefinition(String definition) {
-        this.contributor_definition = definition;
-    }
-    
-    /*
-     * Method for setting package meta data (should be queried from the user)
-     */
-    public void setPackageMetaData() {
-        this.setGuid("1234-1234-1234-1234");
-        this.setVersion("1.0");
-        this.setContributorName("T-75.4210 - Media Production and Use Processes: Group 3");
-        // Fields in itemMeta element
-        this.setVersionCreated(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date()));
-        this.setServiceName("The latest hottest and funkiest news");
-        this.setTitle("Just news");
-        // Fields in contentMeta element
-        this.setContributorName("Group 3");
-        this.setContributorDefinition("A group of desperate students");
-        this.setHeadline("Example headline");
-    }
     
 	/*
 	 * Method for adding news items into package
 	 */
+	
+	public String addNewGroup(String groupId, String role, String groupRef) {
+		GroupItem group = new GroupItem();
+	
+		if(groupId.equals("")) {
+			group.setId("G"+Integer.toString(this.groupItems.size()+1));
+		} else {
+			group.setId(groupId);
+		}
+		
+		System.out.print(groupRef);
+		
+		if(!groupRef.equals("")) {
+			GroupRef group_ref = new GroupRef();
+			group_ref.setId(group.getId());
+			getGroupById(groupRef).setGroupRef(group_ref);
+		}
+		
+	    group.setRole(role);
+	    
+	    this.groupItems.add(group);
+	    
+	    return group.getId();
+	}
+		
+	public GroupItem getGroupById(String id) {
+		for (GroupItem group : this.groupItems) {
+			System.out.print(group.getId() + " " + id);
+			if(group.getId().equals(id)) {
+				return group;
+			}
+		}
+		
+		return null;
+	}
 
-	public void addNewsItem(NewsItem newsItem) {
-	    GroupItem group = new GroupItem();
+	public void addNewsItem(NewsItem newsItem, String groupId) {
+		GroupItem group;
+		
+		if(groupId.equals("")) {
+			group = new GroupItem();
+			group.setId("G"+Integer.toString(this.groupItems.size()+1));
+		    group.setRole("group:package");
+		} else {
+			group = getGroupById(groupId);
+		}
+		
 	    ItemRef item_ref = new ItemRef();
 	    
 	    item_ref.setResidref(newsItem.getGuid());
@@ -222,14 +176,14 @@ public class PackageItem {
 	    item_ref.setHeadline(newsItem.getContentMeta().getHeadline());
 	    item_ref.setDescription(newsItem.getContentMeta().getDescription());
 	    
-	    group.setId("G"+Integer.toString(this.groupItems.size()+1));
-	    group.setRole("group:package");
 	    group.setItemRef(item_ref);
 	    
-		this.groupItems.add(group);
-	}
+	    if(groupId.equals("")) {
+	    	this.groupItems.add(group);
+	    }
+    }
 
-	private class GroupItem {
+	public class GroupItem {
 	    // group item attributes
 		private String id;
 		private String role;
@@ -237,7 +191,10 @@ public class PackageItem {
 		private ArrayList<GroupRef> group_refs;
 		private ArrayList<ItemRef> item_refs;
 
-		public GroupItem() {};
+		public GroupItem() {
+			group_refs = new ArrayList<GroupRef>();
+			item_refs = new ArrayList<ItemRef>();
+		}
 		
 		public String getId() {
 			return id;
@@ -278,7 +235,7 @@ public class PackageItem {
 		}
 	}
 	
-	private class GroupRef {
+	public class GroupRef {
 	    private String id;
 	    
 	    public GroupRef() {};
@@ -292,7 +249,7 @@ public class PackageItem {
 	    }
 	}
 	
-	private class ItemRef {
+	public class ItemRef {
 	    
         //  itemRef attributes
 	    private String residref;
@@ -302,7 +259,6 @@ public class PackageItem {
 	    private String item_class;
 	    private String provider;
 	    private String version_created;
-	    private Date version_created_date;
 	    private String pub_status;
 	    private String headline;
 	    private String description;
@@ -315,6 +271,10 @@ public class PackageItem {
 	    
 	    public void setResidref(String residref) {
 	        this.residref = residref;
+	    }
+	    
+	    public String getContentType() {
+	    	return this.content_type;
 	    }
 	    
 	    public String getSize() {
@@ -346,22 +306,7 @@ public class PackageItem {
         }
 
         public void setVersion_created(String version_created) {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            try {
-                Date date = df.parse(version_created);
-                setVersionCreatedDate(date);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
             this.version_created = version_created;
-        }
-
-        public Date getVersionCreatedDate() {
-            return version_created_date;
-        }
-
-        public void setVersionCreatedDate(Date version_created_date) {
-            this.version_created_date = version_created_date;
         }
 
         public String getPubStatus() {

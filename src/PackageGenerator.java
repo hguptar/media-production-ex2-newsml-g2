@@ -8,11 +8,15 @@
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,17 +49,30 @@ public class PackageGenerator {
 	private final static String CLASS_XPATH = "/newsItem/itemMeta/itemClass/@qcode";
 	private final static String HEADLINE_XPATH = "/newsItem/contentMeta/headline";
 	
+	//Id of the root group
+	private final static String ROOT_GROUP = "root";
+	
+	//Type of groupItem
+	private final static String ROLE_ROOT = "group:root";
+	private final static String ROLE_CLASSIC = "group:package";
+	
+	private int type_attribute;
+	private String value_attribute;
+	
+	
 	private String newsItemFolder;
 	private ArrayList<NewsItem> newsItems;
 	private PackageItem packageItem;
 	
 	private Document xmlPackageFile;
 	
-	public PackageGenerator(String newsItemFolder) {
+	public PackageGenerator(String newsItemFolder,int type_attribute, String value_attribute) {
+		this.type_attribute = type_attribute;
+		this.value_attribute = value_attribute;
 		this.newsItemFolder = newsItemFolder;
 		listItems();
 		this.packageItem = generatePackage();
-		writePackageToFile("package.xml");
+		writePackageToFile("./package.xml");
 	}
 	
 	private void listItems() {
@@ -137,8 +154,6 @@ public class PackageGenerator {
 				}
 				newsItem.getContentMeta().getSubject().setCategories(categories);
 				
-
-				
 				//Get name of news item article
 				expr = xpath.compile(SERVICE_NAME_XPATH);
 				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
@@ -186,9 +201,38 @@ public class PackageGenerator {
 	 */
 	
 	private PackageItem generatePackage() {
-
+		ArrayList<NewsItem> newsItems;
 		// Finds all items from specific department
-	    ArrayList<NewsItem> newsItems = getNewsItemsByDepartment("Kotimaa");
+		switch(this.type_attribute) {
+			case 1:
+				newsItems = getNewsItemsByDepartment(this.value_attribute);
+				break;
+				
+			case 2:
+				newsItems = getNewsItemsByRole(this.value_attribute);
+				break;
+				
+			case 3:
+				newsItems = getNewsItemsByClass(this.value_attribute);
+				break;
+				
+			case 4:
+				newsItems = getNewsItemsByUrgency(this.value_attribute);
+				break;
+				
+			case 5:
+				newsItems = getNewsItemsByHeadline(this.value_attribute);
+				break;
+				
+			case 6:
+				newsItems = getNewsItemsByCategories(this.value_attribute);
+				break;
+				
+			default:
+				newsItems = getNewsItemsByDepartment(this.value_attribute);
+				break;
+		}
+	    
 		
 		//Collections.sort(packageItems, new NewsItemComparator());
 		Collections.sort(newsItems, new NewsItemComparator());
@@ -199,10 +243,48 @@ public class PackageGenerator {
 		
 		PackageItem packageItem = new PackageItem();
 		
-		for (int i = 0; i < items; i++) {
-			System.out.println("Adding news item " + newsItems.get(i).getGuid() + " (" + newsItems.get(i).getItemMeta().getVersionCreated() + ")");
-			packageItem.addNewsItem(newsItems.get(i));
+		//Initialize package ItemMeta
+		packageItem.getItemMeta().setItem_class("ninat:composite");
+		packageItem.getItemMeta().setProvider("Aalto University Group Media");
+		packageItem.getItemMeta().setVersion_created(new Date());
+		packageItem.getItemMeta().setFirst_created(new Date());
+		packageItem.getItemMeta().setPub_status("stat:usable");
+		packageItem.getItemMeta().setGenerator_version("1.0");
+		packageItem.getItemMeta().setGenerator_text("Package Generator v1");
+		packageItem.getItemMeta().setProfile_version("1.0");
+		packageItem.getItemMeta().setProfile_text("ranked_idref_list");
+		packageItem.getItemMeta().setService_code("svc:aaltotop");
+		packageItem.getItemMeta().setService_name("Aalto University");
+		packageItem.getItemMeta().setTitle("MY PACKAGE");
+		packageItem.getItemMeta().setEd_note("DEFINE A NOTE");
+		packageItem.getItemMeta().setSignal_code("act:replacePrev");
+		packageItem.getItemMeta().setLing_residref("irel:previousVersion");
+		packageItem.getItemMeta().setLink_rel("NO TAG");
+		packageItem.getItemMeta().setLink_version("1");
+		
+		//Initialize package ContentMeta
+		packageItem.getContentMeta().getContributor().setJobtitle("staffjobs:cpe");
+		packageItem.getContentMeta().getContributor().setJob_name("Chief Packaging Editor");
+		packageItem.getContentMeta().getContributor().setName("Maxime Andre");
+		packageItem.getContentMeta().getContributor().setQcode("mystaff:MAndre");
+		packageItem.getContentMeta().getContributor().setNote_text("Available everyday");
+		packageItem.getContentMeta().getContributor().setNote_validto("2013-12-31T17:30:00Z");
+		packageItem.getContentMeta().getContributor().setDef_validto("2013-12-31T17:30:00Z");
+		packageItem.getContentMeta().getContributor().setDef_text("Duty Packaging Editor");
+		
+		packageItem.addNewGroup(ROOT_GROUP, ROLE_ROOT, "");
+		
+		if(items > 0) {
+			String groupName = packageItem.addNewGroup("", ROLE_CLASSIC, ROOT_GROUP);
+
+			for (int i = 0; i < items; i++) {
+				System.out.println("Adding news item " + newsItems.get(i).getGuid() + " (" + newsItems.get(i).getItemMeta().getVersionCreated() + ")");
+				packageItem.addNewsItem(newsItems.get(i), groupName);
+			}
+		} else {
+			System.out.print("YOUR PACKAGE DOESN'T CONTAIN ANY NEWSITEM\n");
 		}
+		
 		return packageItem;
 	}
 	
@@ -212,16 +294,78 @@ public class PackageGenerator {
 	
 	public ArrayList<NewsItem> getNewsItemsByDepartment(String department) {
 	    ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
-        for (int i = 0; i < newsItems.size(); i++) {
-            NewsItem item = newsItems.get(i);
+        for (int i = 0; i < this.newsItems.size(); i++) {
+            NewsItem item = this.newsItems.get(i);
             System.out.println(item.getContentMeta().getSubject().getDepartment());
-            if (item.getContentMeta().getSubject().getDepartment().equals(department)) { // You can use your own rules here.
+            if (item.getContentMeta().getSubject().getDepartment().equals(department)) {
                 newsItems.add(item);
             }
         }
         return newsItems;
 	}
-
+	
+	public ArrayList<NewsItem> getNewsItemsByRole(String role) {
+		ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
+        for (int i = 0; i < this.newsItems.size(); i++) {
+            NewsItem item = this.newsItems.get(i);
+            System.out.println(item.getItemMeta().getRole());
+            if (item.getItemMeta().getRole().equals(role)) {
+                newsItems.add(item);
+            }
+        }
+        return newsItems;
+	}
+	
+	public ArrayList<NewsItem> getNewsItemsByClass(String classItem) {
+		ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
+        for (int i = 0; i < this.newsItems.size(); i++) {
+            NewsItem item = this.newsItems.get(i);
+            System.out.println(item.getItemMeta().getItemClass());
+            if (item.getItemMeta().getItemClass().equals(classItem)) {
+                newsItems.add(item);
+            }
+        }
+        return newsItems;
+	}
+	
+	public ArrayList<NewsItem> getNewsItemsByUrgency(String urgency) {
+		ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
+        for (int i = 0; i < this.newsItems.size(); i++) {
+            NewsItem item = this.newsItems.get(i);
+            System.out.println(item.getContentMeta().getUrgency());
+            if (item.getContentMeta().getUrgency().equals(urgency)) {
+                newsItems.add(item);
+            }
+        }
+        return newsItems;
+	}
+	
+	public ArrayList<NewsItem> getNewsItemsByHeadline(String headline) {
+		ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
+        for (int i = 0; i < this.newsItems.size(); i++) {
+            NewsItem item = this.newsItems.get(i);
+            System.out.println(item.getContentMeta().getHeadline());
+            if (item.getContentMeta().getHeadline().equals(headline)) {
+                newsItems.add(item);
+            }
+        }
+        return newsItems;
+	}
+	
+	public ArrayList<NewsItem> getNewsItemsByCategories(String category) {
+		ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
+		boolean addedItem = false;
+        for (int i = 0; i < this.newsItems.size(); i++) {
+            NewsItem item = this.newsItems.get(i);
+            //System.out.println(item.getContentMeta().getHeadline());
+            for(String cat : item.getContentMeta().getSubject().getCategories()) {
+	            if (cat.equals(category) && addedItem == false) {
+	                newsItems.add(item);
+	            }
+            }
+        }
+        return newsItems;
+	}
 	/*
 	 * Method for storing packageItem as a XML document.
 	 */
@@ -254,24 +398,15 @@ public class PackageGenerator {
 
 
             //create child element, add an attribute, and add to root
-            Element itemMeta = this.xmlPackageFile.createElement("itemMeta");
-            Element contentMeta = this.xmlPackageFile.createElement("contentMeta");
+            Element itemMeta = generateItemMetaXml();
+            Element contentMeta = generateContentMetaXml();
+            Element groupSet = generateGroupSetXml();
+            
             root.appendChild(itemMeta);
             root.appendChild(contentMeta);
-            
-            //itemMeta elements
-            Element itemClass = this.xmlPackageFile.createElement("itemClass");
-            itemClass.setAttribute("qcode", this.packageItem.getItemClass());
-            Element provider = this.xmlPackageFile.createElement("provider");
-            provider.setAttribute("literal", this.packageItem.getProvider());
-            Element versionCreated = this.xmlPackageFile.createElement("versionCreated");
-            versionCreated.setTextContent(this.packageItem.getVersionCreated());
-            itemMeta.appendChild(itemClass);
-            itemMeta.appendChild(provider);
-            itemMeta.appendChild(versionCreated);
+            root.appendChild(groupSet);            
             
             
-
             /////////////////
             //Output the XML
 
@@ -289,11 +424,176 @@ public class PackageGenerator {
             String xmlString = sw.toString();
 
             //print xml
-            System.out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + xmlString);
+            try{
+                PrintWriter out  = new PrintWriter(new FileWriter(filePath));
+                out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + xmlString);
+                out.close();
+            } catch(Exception e){
+                e.printStackTrace();
+            }
 
         } catch (Exception e) {
             System.out.println(e);
         }
+	}
+	
+	//Generate the Xml for the ItemMeta element
+	private Element generateItemMetaXml() {
+		Element itemMeta = this.xmlPackageFile.createElement("itemMeta");
+		
+		Element itemClass = this.xmlPackageFile.createElement("itemClass");
+        itemClass.setAttribute("qcode", this.packageItem.getItemMeta().getItem_class());
+        
+        Element provider = this.xmlPackageFile.createElement("provider");
+        provider.setAttribute("literal", this.packageItem.getItemMeta().getProvider());
+        
+        Element versionCreated = this.xmlPackageFile.createElement("versionCreated");
+        versionCreated.setTextContent(this.packageItem.getItemMeta().getVersion_created().toString());
+        
+        Element firstCreated = this.xmlPackageFile.createElement("firstCreated");
+        firstCreated.setTextContent(this.packageItem.getItemMeta().getFirst_created().toString());
+        
+        Element pubStatus = this.xmlPackageFile.createElement("pubStatus");
+        pubStatus.setAttribute("qcode",this.packageItem.getItemMeta().getPub_status());
+        
+        Element generator = this.xmlPackageFile.createElement("generator");
+        generator.setAttribute("versioninfo", this.packageItem.getItemMeta().getGenerator_version());
+        generator.setTextContent(this.packageItem.getItemMeta().getGenerator_text());
+        
+        Element profile = this.xmlPackageFile.createElement("profile");
+        profile.setAttribute("versioninfo", this.packageItem.getItemMeta().getProfile_version());
+        profile.setTextContent(this.packageItem.getItemMeta().getProfile_text());
+        
+        Element service = this.xmlPackageFile.createElement("service");
+        Element serviceName = this.xmlPackageFile.createElement("name");
+        service.setAttribute("qcode", this.packageItem.getItemMeta().getService_code());
+        serviceName.setTextContent(this.packageItem.getItemMeta().getService_name());
+        service.appendChild(serviceName);
+        
+        Element title = this.xmlPackageFile.createElement("title");
+        title.setTextContent(this.packageItem.getItemMeta().getTitle());
+        
+        Element edNote = this.xmlPackageFile.createElement("edNote");
+        edNote.setTextContent(this.packageItem.getItemMeta().getEd_note());
+        
+        Element signal = this.xmlPackageFile.createElement("signal");
+        signal.setAttribute("qcode", this.packageItem.getItemMeta().getSignal_code());
+        
+        Element link = this.xmlPackageFile.createElement("link");
+        link.setAttribute("rel", this.packageItem.getItemMeta().getLink_rel());
+        link.setAttribute("residref", this.packageItem.getItemMeta().getLing_residref());
+        link.setAttribute("version", this.packageItem.getItemMeta().getLink_version());
+            		
+        
+        itemMeta.appendChild(itemClass);
+        itemMeta.appendChild(provider);
+        itemMeta.appendChild(versionCreated);
+        itemMeta.appendChild(firstCreated);
+        itemMeta.appendChild(pubStatus);
+        itemMeta.appendChild(generator);
+        itemMeta.appendChild(profile);
+        itemMeta.appendChild(service);
+        itemMeta.appendChild(title);
+        itemMeta.appendChild(edNote);
+        itemMeta.appendChild(signal);
+        itemMeta.appendChild(link);
+        
+        return itemMeta;
+	}
+	
+	//Generate the Xml for the ContentMeta element
+	private Element generateContentMetaXml() {
+		
+		Element contentMeta = this.xmlPackageFile.createElement("contentMeta");
+		
+		Element contributor = this.xmlPackageFile.createElement("contributor");
+		Element headline = this.xmlPackageFile.createElement("headline");
+		
+		//Define the contributor element
+		Element name = this.xmlPackageFile.createElement("name");
+		Element nameJob = this.xmlPackageFile.createElement("name");
+		name.setTextContent(this.packageItem.getContentMeta().getContributor().getName());
+		nameJob.setTextContent(this.packageItem.getContentMeta().getContributor().getJob_name());
+		Element definition = this.xmlPackageFile.createElement("definition");
+		definition.setAttribute("validto", this.packageItem.getContentMeta().getContributor().getDef_validto());
+		definition.setTextContent(this.packageItem.getContentMeta().getContributor().getDef_text());
+		Element note = this.xmlPackageFile.createElement("note");
+		note.setAttribute("validto", this.packageItem.getContentMeta().getContributor().getNote_validto());
+		note.setTextContent(this.packageItem.getContentMeta().getContributor().getNote_text());
+		
+		contributor.setAttribute("jobtitle", this.packageItem.getContentMeta().getContributor().getJobtitle());
+		contributor.setAttribute("qcode", this.packageItem.getContentMeta().getContributor().getQcode());
+		contributor.appendChild(name);
+		contributor.appendChild(nameJob);
+		contributor.appendChild(definition);
+		contributor.appendChild(note);
+		
+		//Define the headline element
+		headline.setAttribute("xml:lang", this.packageItem.getContentMeta().getHeadline().getHeadline_lang());
+		headline.setTextContent(this.packageItem.getContentMeta().getHeadline().getHeadline_text());
+		
+		
+		contentMeta.appendChild(contributor);
+		contentMeta.appendChild(headline);
+		
+		return contentMeta;
+	}
+	
+	//Generate the Xml for the GroupSet element
+	private Element generateGroupSetXml() {
+		Element groupSet = this.xmlPackageFile.createElement("groupSet");
+		
+		groupSet.setAttribute("root", ROOT_GROUP);
+		
+		for(PackageItem.GroupItem group : packageItem.getGroupItems()) {
+			Element groupElement = this.xmlPackageFile.createElement("group");
+			groupElement.setAttribute("id", group.getId());
+			groupElement.setAttribute("role", group.getRole());
+			
+			for(PackageItem.GroupRef group_ref : group.getGroupRef()) {
+				Element groupRefElement = this.xmlPackageFile.createElement("groupRef");
+				groupRefElement.setAttribute("idref", group_ref.getId());
+				
+				groupElement.appendChild(groupRefElement);
+			}
+			
+			for(PackageItem.ItemRef item_ref : group.getItemRef()) {
+				Element itemRefElement = this.xmlPackageFile.createElement("itemRef");
+				itemRefElement.setAttribute("residred",item_ref.getResidref());
+				itemRefElement.setAttribute("contenttype",item_ref.getContentType());
+				itemRefElement.setAttribute("size",item_ref.getSize());
+				
+				Element itemClass = this.xmlPackageFile.createElement("itemClass");
+				itemClass.setAttribute("qcode", item_ref.getItemClass());
+				
+				Element provider = this.xmlPackageFile.createElement("provider");
+				provider.setAttribute("literal", item_ref.getProvider());
+				
+				Element versionCreated = this.xmlPackageFile.createElement("versionCreated");
+				versionCreated.setTextContent(item_ref.getVersion_created());
+				
+				Element pubStatus = this.xmlPackageFile.createElement("pubStatus");
+				pubStatus.setAttribute("qcode", item_ref.getPubStatus());
+				
+				Element headline = this.xmlPackageFile.createElement("headline");
+				headline.setTextContent(item_ref.getHeadline());
+				
+				Element description = this.xmlPackageFile.createElement("description");
+				description.setTextContent(item_ref.getDescription());
+				
+				itemRefElement.appendChild(itemClass);
+				itemRefElement.appendChild(provider);
+				itemRefElement.appendChild(versionCreated);
+				itemRefElement.appendChild(pubStatus);
+				itemRefElement.appendChild(headline);
+				
+				groupElement.appendChild(itemRefElement);
+			}
+			
+			groupSet.appendChild(groupElement);
+		} 
+		
+		return groupSet;
 	}
 	
 	/**
@@ -311,8 +611,45 @@ public class PackageGenerator {
 	/*
      * Main method
      */
-	public static void main(String[] args) {
-		PackageGenerator packageGenerator = new PackageGenerator("./stt_lehtikuva_newsItems");
+	public static void main(String[] args) {;
+		boolean notAnInt = true;
+		Scanner scanner = new Scanner(System.in);
+		int type_attribute = 1;
+		String value_attribute;
+		
+		System.out.print("PACKAGE GENERATOR V1 -- This package generator generates package of last ten news\n");
+		System.out.print("You can choose one type of attribute and the value of this attribute\n");
+		System.out.print("Attributes availables are :\n");
+		System.out.print(" - Department 1\n");
+		System.out.print(" - Role 2\n");
+		System.out.print(" - Class 3\n");
+		System.out.print(" - Urgency 4\n");
+		System.out.print(" - Headline 5\n");
+		System.out.print(" - Categories 6\n");
+		System.out.print("By which type of attribute do you want to create a package ?\n");
+		
+		while(notAnInt) {
+			try {
+				type_attribute = scanner.nextInt();
+				
+				if(type_attribute > 0 && type_attribute < 7) {
+					System.out.print(type_attribute);
+					notAnInt = false;
+				} else {
+					System.out.print("This option doesn't exist\n");
+					scanner.nextLine();
+				}
+			} catch(Exception e) {
+				System.out.print("This option doesn't exist\n");
+				scanner.nextLine();
+			}
+		}
+		scanner.nextLine();
+		System.out.print("Now you can enter the value of your attribute :\n");
+		value_attribute = scanner.nextLine();
+		
+		
+		PackageGenerator packageGenerator = new PackageGenerator("./stt_lehtikuva_newsItems",type_attribute,value_attribute);
 		//System.out.println(packageGenerator.getPackage().getVersionCreated());
 	}
 }
