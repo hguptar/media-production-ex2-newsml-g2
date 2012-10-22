@@ -417,18 +417,29 @@ public class PackageGenerator {
 	
 	public ArrayList<NewsItem> getNewsItemsByCategories(String category) {
 		System.out.println("The application is selecting news item where the category is: "+category+"\n");
-		ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
-		boolean addedItem = false;
+		ArrayList<NewsItem> newsItems_temp = new ArrayList<NewsItem>();
         for (int i = 0; i < this.newsItems.size(); i++) {
             NewsItem item = this.newsItems.get(i);
             for(String cat : item.getContentMeta().getSubject().getCategories()) {
-	            if (cat.equals(category) && addedItem == false) {
-	                newsItems.add(item);
+	            if(IsNotOnTheListAlready(item, newsItems_temp) && cat.equals(category)) {
+	                newsItems_temp.add(item);
 	            }
             }
         }
-        return newsItems;
+        return newsItems_temp;
 	}
+	
+	public boolean IsNotOnTheListAlready(NewsItem item, ArrayList<NewsItem> list) {
+	    for(NewsItem ni : list)
+	    {
+	        if(item.getGuid().equals(ni.getGuid()))
+	        {
+	            return false;
+	        }
+	    }
+	    return true;
+	}
+	
 	/*
 	 * Method for storing packageItem as a XML document.
 	 */
@@ -497,6 +508,7 @@ public class PackageGenerator {
         } catch (Exception e) {
             System.out.println(e);
         }
+		System.out.println("Done!");
 	}
 	
 	//Generate the Xml for the ItemMeta element
