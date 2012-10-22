@@ -3,7 +3,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class ContentMeta {
+public class ContentMetaNews {
 
         // Urgency of the news item
         private String urgency;
@@ -23,7 +23,7 @@ public class ContentMeta {
         private String contributor_name;
         private String contributor_definition;
         
-        public ContentMeta() {
+        public ContentMetaNews() {
             this.subject = new Subject();
         };
         

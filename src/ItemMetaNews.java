@@ -2,7 +2,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ItemMeta {
+public class ItemMetaNews {
     
     // Class of the news item
     private String item_class;
@@ -18,11 +18,8 @@ public class ItemMeta {
     private String role;
     private String service_code;
     private String service_name;
-    // PackageItem specific elements
-    private String generator;
-    private String title;
     
-    public ItemMeta() {};
+    public ItemMetaNews() {};
     
     public String getItemClass() {
         return item_class;
@@ -116,21 +113,5 @@ public class ItemMeta {
     
     public void setServiceName(String service_name) {
         this.service_name = service_name;
-    }
-    
-    public String getGenerator() {
-        return this.generator;
-    }
-
-    public void setGenerator(String generator) {
-        this.generator = generator;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-    
-    public void setTitle(String title) {
-        this.title = title;
     }
 }

@@ -11,15 +11,15 @@ public class NewsItem {
 	private String version;
 	private String catalog_ref;
 	// See ItemMeta.java
-	private ItemMeta item_meta;
+	private ItemMetaNews item_meta;
    // See ContentMeta.java
-	private ContentMeta content_meta = new ContentMeta();
+	private ContentMetaNews content_meta = new ContentMetaNews();
 	//Size of a news item
 	private long size;
 	
 	public NewsItem() {
-	    this.item_meta = new ItemMeta();
-	    this.content_meta = new ContentMeta();
+	    this.item_meta = new ItemMetaNews();
+	    this.content_meta = new ContentMetaNews();
 	};
 	
 	/*
@@ -58,19 +58,19 @@ public class NewsItem {
 	    this.catalog_ref = catalog_ref;
 	}
 
-	public ItemMeta getItemMeta() {
+	public ItemMetaNews getItemMeta() {
 	    return this.item_meta;
 	}
 	
-	public void setItemMeta(ItemMeta item_meta) {
+	public void setItemMeta(ItemMetaNews item_meta) {
 	    this.item_meta = item_meta;
 	}
 	
-	public ContentMeta getContentMeta() {
+	public ContentMetaNews getContentMeta() {
         return this.content_meta;
     }
     
-    public void setContentMeta(ContentMeta content_meta) {
+    public void setContentMeta(ContentMetaNews content_meta) {
         this.content_meta = content_meta;
     }
 
