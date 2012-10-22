@@ -75,12 +75,13 @@ public class PackageGenerator {
 		listItems();
 		this.packageItem = generatePackage();
 		writePackageToFile("./" + file_name);
+		System.out.print("Your package xml file has been generated.\n");
 	}
 	
 	private void listItems() {
 		
 		this.newsItems = new ArrayList<NewsItem>();
-		
+		System.out.print("The application is reading the news items in the folder : " +  this.newsItemFolder +"\n");
 		// List all the files that end with '.xml' in the given folder
 		File[] allNewsItems = new File(this.newsItemFolder).listFiles(new FileFilter() {
 			
@@ -222,6 +223,7 @@ public class PackageGenerator {
 	 */
 	
 	private PackageItem generatePackage() {
+		System.out.print("The application is starting the generation of your package\n");
 		ArrayList<NewsItem> newsItems;
 		int items = 0;
 		// Finds all items from specific department
@@ -311,6 +313,7 @@ public class PackageGenerator {
 	}
 	
 	public ArrayList<NewsItem> getNewsItemsByDepartment(String department) {
+		System.out.print("The application is selecting news item where the department is :" + department + "\n");
 	    ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
         for (int i = 0; i < this.newsItems.size(); i++) {
             NewsItem item = this.newsItems.get(i);
@@ -322,6 +325,7 @@ public class PackageGenerator {
 	}
 	
 	public ArrayList<NewsItem> getNewsItemsByTopic(String topic) {
+		System.out.print("The application is selecting news item where the topic is :" + topic + "\n");
 	    ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
         for (int i = 0; i < this.newsItems.size(); i++) {
             NewsItem item = this.newsItems.get(i);
@@ -335,6 +339,7 @@ public class PackageGenerator {
 	}
 	
 	public ArrayList<NewsItem> getNewsItemsByCategories(String category) {
+		System.out.print("The application is selecting news item where the category is :" + category + "\n");
 		ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
 		boolean addedItem = false;
         for (int i = 0; i < this.newsItems.size(); i++) {
@@ -352,7 +357,7 @@ public class PackageGenerator {
 	 */
 	
 	private void writePackageToFile(String filePath) {
-		
+		System.out.print("The application is now writing the XML File of your package\n");
 		try {
             /////////////////////////////
             //Creating an empty XML Document
@@ -638,15 +643,15 @@ public class PackageGenerator {
 				break;
 				
 			case 2:
-				System.out.print("What is the name of the department ?\n");
+				System.out.print("What is the name of the department (e.g : \"Talous\" ?\n");
 				break;
 				
 			case 3:
-				System.out.print("What is the name of the category ?\n");
+				System.out.print("What is the name of the category ? (e.g : \"Politiikka\" \n");
 				break;
 				
 			case 4:
-				System.out.print("What is the name of the category ?\n");
+				System.out.print("What is the name of the category ? (e.g : \"Politiikka\" \n");
 				break;
 				
 			default:
@@ -654,9 +659,6 @@ public class PackageGenerator {
 				break;
 		}
 		value_attribute = scanner.nextLine();
-		
-		
-		scanner.nextLine();
 		System.out.print("Choose the name of your package xml file (e.g. : package.xml) :\n");
 		file_name = scanner.nextLine();
 		

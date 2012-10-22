@@ -3,8 +3,8 @@
 <itemMeta>
 <itemClass qcode="ninat:composite"/>
 <provider literal="Aalto University Group Media"/>
-<versionCreated>Mon Oct 22 15:29:02 EEST 2012</versionCreated>
-<firstCreated>Mon Oct 22 15:29:02 EEST 2012</firstCreated>
+<versionCreated>Mon Oct 22 15:37:59 EEST 2012</versionCreated>
+<firstCreated>Mon Oct 22 15:37:59 EEST 2012</firstCreated>
 <pubStatus qcode="stat:usable"/>
 <generator versioninfo="1.0">Package Generator v1</generator>
 <profile versioninfo="1.0">ranked_idref_list</profile>
