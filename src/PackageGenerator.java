@@ -608,42 +608,41 @@ public class PackageGenerator {
 	public static void main(String[] args) {;
 		boolean notAnInt = true;
 		Scanner scanner = new Scanner(System.in);
-		int type_attribute = 1;
+		int type_attribute_idx = 1;
 		String value_attribute;
-		
-		System.out.print("PACKAGE GENERATOR V1 -- This package generator generates package of last ten news\n");
-		System.out.print("You can choose one type of attribute and the value of this attribute\n");
-		System.out.print("Attributes availables are :\n");
-		System.out.print(" - Department 1\n");
-		System.out.print(" - Role 2\n");
-		System.out.print(" - Class 3\n");
-		System.out.print(" - Urgency 4\n");
-		System.out.print(" - Headline 5\n");
-		System.out.print(" - Categories 6\n");
-		System.out.print("By which type of attribute do you want to create a package ?\n");
+		ArrayList<String> attributes = new ArrayList<String>();
+		attributes.add("Department"); attributes.add("Role"); attributes.add("Class"); attributes.add("Urgency"); 
+		attributes.add("Headline"); attributes.add("Categories"); 
+		System.out.println("PACKAGE GENERATOR V1 -- This package generator generates package of last ten news");
+		System.out.println("Choose an attribute and search news items based on its value");
+		System.out.println("Available attributes:");
+		System.out.println("");
+		for(int i = 0; i < attributes.size(); i++)
+		{
+		    System.out.println(" - "+attributes.get(i)+" "+(i+1));
+		}
+		System.out.println("");
+		System.out.println("By which attribute would you like to sort the news items?");
 		
 		while(notAnInt) {
 			try {
-				type_attribute = scanner.nextInt();
+				type_attribute_idx = scanner.nextInt();
 				
-				if(type_attribute > 0 && type_attribute < 7) {
-					System.out.print(type_attribute);
+				if(type_attribute_idx > 0 && type_attribute_idx < 7) {
 					notAnInt = false;
 				} else {
-					System.out.print("This option doesn't exist\n");
+					System.out.println("This option doesn't exist");
 					scanner.nextLine();
 				}
 			} catch(Exception e) {
-				System.out.print("This option doesn't exist\n");
+				System.out.println("This option doesn't exist");
 				scanner.nextLine();
 			}
 		}
 		scanner.nextLine();
-		System.out.print("Now you can enter the value of your attribute :\n");
+		System.out.println("Search news items by '"+attributes.get(type_attribute_idx-1)+"':");
 		value_attribute = scanner.nextLine();
 		
-		
-		PackageGenerator packageGenerator = new PackageGenerator("./stt_lehtikuva_newsItems",type_attribute,value_attribute);
-		//System.out.println(packageGenerator.getPackage().getVersionCreated());
+		PackageGenerator packageGenerator = new PackageGenerator("./stt_lehtikuva_newsItems",type_attribute_idx,value_attribute);
 	}
 }
