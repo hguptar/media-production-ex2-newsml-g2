@@ -67,18 +67,70 @@ public class PackageGenerator {
 	
 	private String newsItemFolder;
 	private ArrayList<NewsItem> newsItems;
-	private PackageItem packageItem = new PackageItem();
-	
 	private Document xmlPackageFile;
+	private PackageItem packageItem = new PackageItem();
+	private String outputfilePath;
 	
-	public PackageGenerator(String newsItemFolder,int type_attribute, String value_attribute, String file_name) {
-		this.type_attribute = type_attribute;
-		this.value_attribute = value_attribute;
+	public PackageGenerator(String newsItemFolder) {
 		this.newsItemFolder = newsItemFolder;
+		getUserInput();
 		listItems();
-		this.packageItem = generatePackage();
-		writePackageToFile("./" + file_name);
-		System.out.println("Your package XML file has been created (to generated/).");
+		generatePackage();
+		writePackageToFile();
+	}
+	
+	private void getUserInput() {
+	    Scanner scanner = new Scanner(System.in);
+	    System.out.println("Which type of a package would you like to create (1, 2, 3 or 4)?");
+        int type_attribute_idx;
+        while(true) {
+            try {
+                type_attribute_idx = scanner.nextInt();
+                if(type_attribute_idx > 0 && type_attribute_idx < 5) 
+                {
+                    this.type_attribute = type_attribute_idx;
+                    break;
+                } 
+                else 
+                {
+                    System.out.println("This option doesn't exist");
+                    scanner.nextLine();
+                }
+            } catch(Exception e) {
+                System.out.println("This option doesn't exist");
+                scanner.nextLine();
+            }
+        }
+        
+        scanner.nextLine();
+        
+        switch(type_attribute_idx) {
+            case 1:
+                System.out.println("What is the name/qcode of the topic (e.g. \"stttopic:75182\" or \"Saksalaisten niukka enemmistš haluaisi eroon eurosta\")?");
+                break;
+                
+            case 2:
+                System.out.println("What is the name of the department (e.g. \"Talous\")?");
+                break;
+                
+            case 3:
+                System.out.println("What is the name of the category (e.g. \"Politiikka\")?");
+                break;
+                
+            case 4:
+                System.out.println("What is the name of the category (e.g. \"Politiikka\")?");
+                break;
+                
+            default:
+                System.out.println("What is the name or the qcode of the topic (e.g. \"stttopic:75182\" or \"Saksalaisten niukka enemmistö haluaisi eroon eurosta\")?");
+                break;
+        }
+        this.value_attribute = scanner.nextLine();
+        
+        System.out.println("Write a file name for your package XML file (e.g. myNewsItemPackage)");
+        this.outputfilePath = "generated/"+scanner.nextLine()+".xml";
+        System.out.println("Your package XML file has been created to "+this.outputfilePath);
+        System.out.println("\nThe application will now output the XML file of your package...");
 	}
 	
 	private void listItems() {
@@ -250,7 +302,7 @@ public class PackageGenerator {
 	 * Method for generating packageItem from newsItem list.
 	 */
 	
-	private PackageItem generatePackage() {
+	private void generatePackage() {
 		System.out.println("The application is starting the generation of your package...");
 		ArrayList<NewsItem> newsItems;
 		int items = 0;
@@ -331,8 +383,6 @@ public class PackageGenerator {
 		} else {
 			System.out.println("No matches were found.");
 		}
-		
-		return this.getPackage();
 	}
 	
 	public PackageItem getPackage() {
@@ -383,8 +433,7 @@ public class PackageGenerator {
 	 * Method for storing packageItem as a XML document.
 	 */
 	
-	private void writePackageToFile(String filePath) {
-		System.out.println("\nThe application is now writing the XML File of your package...");
+	private void writePackageToFile() {
 		try {
             /////////////////////////////
             //Creating an empty XML Document
@@ -438,7 +487,7 @@ public class PackageGenerator {
 
             //print xml
             try{
-                PrintWriter out  = new PrintWriter(new FileWriter(filePath));
+                PrintWriter out  = new PrintWriter(new FileWriter(this.outputfilePath));
                 out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + xmlString);
                 out.close();
             } catch(Exception e){
@@ -627,72 +676,24 @@ public class PackageGenerator {
 	/*
      * Main method
      */
-	public static void main(String[] args) {;
-		boolean notAnInt = true;
-		Scanner scanner = new Scanner(System.in);
-		int type_attribute_idx = 1;
-		String value_attribute;
-		String file_name;
-		ArrayList<String> attributes = new ArrayList<String>();
+	public static void main(String[] args) {
+		ArrayList<String> options = new ArrayList<String>();
 		
-		attributes.add("All news items related to a specific topic");
-		attributes.add("Most recent news items from a specific department");
-		attributes.add("Most recent news items related to a specific category"); 
-		attributes.add("All news items related to a specific category"); 
+		options.add("All news items related to a specific topic");
+		options.add("Most recent news items from a specific department");
+		options.add("Most recent news items related to a specific category"); 
+		options.add("All news items related to a specific category"); 
 		
 		System.out.println("<--- NEWSML-G2 news package generator --->\n");
 		System.out.println("Please choose which type of a package you'd like to create.\n");
 		System.out.println("Available types are:");
-		for(int i = 0; i < attributes.size(); i++)
+		for(int i = 0; i < options.size(); i++)
 		{
-		    System.out.println(" - "+attributes.get(i)+" "+(i+1));
+		    System.out.println(" - "+options.get(i)+" "+(i+1));
 		}
 		System.out.println("");
-		System.out.println("Which type of a package would you like to create (1, 2, 3 or 4)?");
 		
-		while(notAnInt) {
-			try {
-				type_attribute_idx = scanner.nextInt();
-				
-				if(type_attribute_idx > 0 && type_attribute_idx < 5) {
-					notAnInt = false;
-				} else {
-					System.out.println("This option doesn't exist");
-					scanner.nextLine();
-				}
-			} catch(Exception e) {
-				System.out.println("This option doesn't exist");
-				scanner.nextLine();
-			}
-		}
 		
-		scanner.nextLine();
-		
-		switch(type_attribute_idx) {
-			case 1:
-				System.out.println("What is the name/qcode of the topic (e.g. \"stttopic:75182\" or \"Saksalaisten niukka enemmistš haluaisi eroon eurosta\")?");
-				break;
-				
-			case 2:
-				System.out.println("What is the name of the department (e.g. \"Talous\")?");
-				break;
-				
-			case 3:
-				System.out.println("What is the name of the category (e.g. \"Politiikka\")?");
-				break;
-				
-			case 4:
-				System.out.println("What is the name of the category (e.g. \"Politiikka\")?");
-				break;
-				
-			default:
-				System.out.println("What is the name or the qcode of the topic (e.g. \"stttopic:75182\" or \"Saksalaisten niukka enemmistö haluaisi eroon eurosta\")?");
-				break;
-		}
-		value_attribute = scanner.nextLine();
-		System.out.println("Write a file name for your package XML file (e.g. package.xml)");
-		file_name = "generated/"+scanner.nextLine();
-		
-		PackageGenerator packageGenerator = new PackageGenerator("./stt_lehtikuva_newsItems",type_attribute_idx,value_attribute,file_name);
+        PackageGenerator packageGenerator = new PackageGenerator("./stt_lehtikuva_newsItems");
 	}
 }
