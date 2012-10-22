@@ -3,7 +3,6 @@
  * listing files in folder and reading XML documents, and
  * processing of their contents.
  * 
- * Add more code for NewsML-G2 package generation.
  */
 
 import java.io.File;
