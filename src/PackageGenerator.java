@@ -44,6 +44,7 @@ public class PackageGenerator {
 	private final static String URGENCY_XPATH = "/newsItem/contentMeta/urgency";
 	private final static String DEPARTMENT_XPATH = "/newsItem/contentMeta/subject[@type='cpnat:department']/name";
 	private final static String CATEGORIES_XPATH = "/newsItem/contentMeta/subject[@type='cpnat:category']/name";
+	private final static String TOPICS_XPATH = "/newsItem/contentMeta/subject[@type='cpnat:topic']/name";
 	private final static String SERVICE_NAME_XPATH = "/newsItem/itemMeta/service/name";
 	private final static String LOCATION_XPATH = "/newsItem/contentMeta/located/name";
 	private final static String CLASS_XPATH = "/newsItem/itemMeta/itemClass/@qcode";
@@ -66,13 +67,13 @@ public class PackageGenerator {
 	
 	private Document xmlPackageFile;
 	
-	public PackageGenerator(String newsItemFolder,int type_attribute, String value_attribute) {
+	public PackageGenerator(String newsItemFolder,int type_attribute, String value_attribute, String file_name) {
 		this.type_attribute = type_attribute;
 		this.value_attribute = value_attribute;
 		this.newsItemFolder = newsItemFolder;
 		listItems();
 		this.packageItem = generatePackage();
-		writePackageToFile("./package.xml");
+		writePackageToFile("./" + file_name);
 	}
 	
 	private void listItems() {
@@ -154,6 +155,12 @@ public class PackageGenerator {
 				}
 				newsItem.getContentMeta().getSubject().setCategories(categories);
 				
+				//Get NewsItem topic
+				expr = xpath.compile(TOPICS_XPATH);
+				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
+				String topic = nodes.item(0).getTextContent();
+				newsItem.getContentMeta().getSubject().setTopic(topic);
+				
 				//Get name of news item article
 				expr = xpath.compile(SERVICE_NAME_XPATH);
 				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
@@ -202,34 +209,27 @@ public class PackageGenerator {
 	
 	private PackageItem generatePackage() {
 		ArrayList<NewsItem> newsItems;
+		int items = 0;
 		// Finds all items from specific department
 		switch(this.type_attribute) {
 			case 1:
-				newsItems = getNewsItemsByDepartment(this.value_attribute);
+				newsItems = getNewsItemsByTopic(this.value_attribute);
 				break;
 				
 			case 2:
-				newsItems = getNewsItemsByRole(this.value_attribute);
+				newsItems = getNewsItemsByDepartment(this.value_attribute);
 				break;
 				
 			case 3:
-				newsItems = getNewsItemsByClass(this.value_attribute);
+				newsItems = getNewsItemsByCategories(this.value_attribute);
 				break;
 				
 			case 4:
-				newsItems = getNewsItemsByUrgency(this.value_attribute);
-				break;
-				
-			case 5:
-				newsItems = getNewsItemsByHeadline(this.value_attribute);
-				break;
-				
-			case 6:
 				newsItems = getNewsItemsByCategories(this.value_attribute);
 				break;
 				
 			default:
-				newsItems = getNewsItemsByDepartment(this.value_attribute);
+				newsItems = getNewsItemsByTopic(this.value_attribute);
 				break;
 		}
 	    
@@ -237,9 +237,13 @@ public class PackageGenerator {
 		//Collections.sort(packageItems, new NewsItemComparator());
 		Collections.sort(newsItems, new NewsItemComparator());
 		
-		// Creates packageItem containing first 10 items
-		int items = 10;
-		if (newsItems.size() < 10) items = newsItems.size();
+		//If we want to generate a package of last news
+		if(this.type_attribute == 2 || this.type_attribute == 3)  {
+			items = 10;
+			if (newsItems.size() < 10) items = newsItems.size();
+		} else {
+			items = newsItems.size();
+		}
 		
 		PackageItem packageItem = new PackageItem();
 		
@@ -303,44 +307,11 @@ public class PackageGenerator {
         return newsItems;
 	}
 	
-	public ArrayList<NewsItem> getNewsItemsByRole(String role) {
-		ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
+	public ArrayList<NewsItem> getNewsItemsByTopic(String topic) {
+	    ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
         for (int i = 0; i < this.newsItems.size(); i++) {
             NewsItem item = this.newsItems.get(i);
-            if (item.getItemMeta().getRole().equals(role)) {
-                newsItems.add(item);
-            }
-        }
-        return newsItems;
-	}
-	
-	public ArrayList<NewsItem> getNewsItemsByClass(String classItem) {
-		ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
-        for (int i = 0; i < this.newsItems.size(); i++) {
-            NewsItem item = this.newsItems.get(i);
-            if (item.getItemMeta().getItemClass().equals(classItem)) {
-                newsItems.add(item);
-            }
-        }
-        return newsItems;
-	}
-	
-	public ArrayList<NewsItem> getNewsItemsByUrgency(String urgency) {
-		ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
-        for (int i = 0; i < this.newsItems.size(); i++) {
-            NewsItem item = this.newsItems.get(i);
-            if (item.getContentMeta().getUrgency().equals(urgency)) {
-                newsItems.add(item);
-            }
-        }
-        return newsItems;
-	}
-	
-	public ArrayList<NewsItem> getNewsItemsByHeadline(String headline) {
-		ArrayList<NewsItem> newsItems = new ArrayList<NewsItem>();
-        for (int i = 0; i < this.newsItems.size(); i++) {
-            NewsItem item = this.newsItems.get(i);
-            if (item.getContentMeta().getHeadline().equals(headline)) {
+            if (item.getContentMeta().getSubject().getTopic().equals(topic)) {
                 newsItems.add(item);
             }
         }
@@ -610,23 +581,22 @@ public class PackageGenerator {
 		Scanner scanner = new Scanner(System.in);
 		int type_attribute = 1;
 		String value_attribute;
+		String file_name;
 		
 		System.out.print("PACKAGE GENERATOR V1 -- This package generator generates package of last ten news\n");
-		System.out.print("You can choose one type of attribute and the value of this attribute\n");
-		System.out.print("Attributes availables are :\n");
-		System.out.print(" - Department 1\n");
-		System.out.print(" - Role 2\n");
-		System.out.print(" - Class 3\n");
-		System.out.print(" - Urgency 4\n");
-		System.out.print(" - Headline 5\n");
-		System.out.print(" - Categories 6\n");
-		System.out.print("By which type of attribute do you want to create a package ?\n");
+		System.out.print("You can choose which type of package do you want to create\n");
+		System.out.print("Available types are :\n");
+		System.out.print(" - All news items related to a specific topic 1\n");
+		System.out.print(" - Most recent news items from a specific department 2\n");
+		System.out.print(" - Most recent news items related to a specific category 3\n");
+		System.out.print(" - All news items related to a specific category 4\n");
+		System.out.print("Which type of package do you want to create ?\n");
 		
 		while(notAnInt) {
 			try {
 				type_attribute = scanner.nextInt();
 				
-				if(type_attribute > 0 && type_attribute < 7) {
+				if(type_attribute > 0 && type_attribute < 5) {
 					System.out.print(type_attribute);
 					notAnInt = false;
 				} else {
@@ -638,12 +608,36 @@ public class PackageGenerator {
 				scanner.nextLine();
 			}
 		}
+		
 		scanner.nextLine();
-		System.out.print("Now you can enter the value of your attribute :\n");
+		switch(type_attribute) {
+			case 1:
+				System.out.print("What is the name of the topic ?\n");
+				break;
+				
+			case 2:
+				System.out.print("What is the name of the department ?\n");
+				break;
+				
+			case 3:
+				System.out.print("What is the name of the category ?\n");
+				break;
+				
+			case 4:
+				System.out.print("What is the name of the category ?\n");
+				break;
+				
+			default:
+				System.out.print("What is the name of the topic ?\n");
+				break;
+		}
 		value_attribute = scanner.nextLine();
 		
 		
-		PackageGenerator packageGenerator = new PackageGenerator("./stt_lehtikuva_newsItems",type_attribute,value_attribute);
-		//System.out.println(packageGenerator.getPackage().getVersionCreated());
+		scanner.nextLine();
+		System.out.print("Choose the name of your package xml file (e.g. : package.xml) :\n");
+		file_name = scanner.nextLine();
+		
+		PackageGenerator packageGenerator = new PackageGenerator("./stt_lehtikuva_newsItems",type_attribute,value_attribute,file_name);
 	}
 }
