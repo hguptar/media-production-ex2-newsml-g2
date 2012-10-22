@@ -8,4 +8,4 @@
 *.class
 .settings
 .metadata
-package.xml
+generated/

@@ -1,7 +1,4 @@
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class PackageItem {
 	
@@ -40,7 +37,6 @@ public class PackageItem {
 	 */
 	private String root;
 	private ArrayList<GroupItem> groupItems;
-    private Object getContentMeta;
 	
 	public PackageItem() {
 		groupItems = new ArrayList<GroupItem>();
