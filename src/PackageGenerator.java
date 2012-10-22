@@ -45,6 +45,7 @@ public class PackageGenerator {
 	private final static String DEPARTMENT_XPATH = "/newsItem/contentMeta/subject[@type='cpnat:department']/name";
 	private final static String CATEGORIES_XPATH = "/newsItem/contentMeta/subject[@type='cpnat:category']/name";
 	private final static String TOPICS_XPATH = "/newsItem/contentMeta/subject[@type='cpnat:topic']/name";
+	private final static String TOPICS_CODE_XPATH = "/newsItem/contentMeta/subject[@type='cpnat:topic']/@qcode";
 	private final static String SERVICE_NAME_XPATH = "/newsItem/itemMeta/service/name";
 	private final static String LOCATION_XPATH = "/newsItem/contentMeta/located/name";
 	private final static String CLASS_XPATH = "/newsItem/itemMeta/itemClass/@qcode";
@@ -158,9 +159,22 @@ public class PackageGenerator {
 				//Get NewsItem topic
 				expr = xpath.compile(TOPICS_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
-				String topic = nodes.item(0).getTextContent();
-				newsItem.getContentMeta().getSubject().setTopic(topic);
+				if(nodes.item(0) != null) {
+					String topic = nodes.item(0).getTextContent();
+					newsItem.getContentMeta().getSubject().setTopic(topic);
+				} else {
+					newsItem.getContentMeta().getSubject().setTopic("");
+				}
 				
+				//Get NewsItem topic_code
+				expr = xpath.compile(TOPICS_CODE_XPATH);
+				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
+				if(nodes.item(0) != null) {
+					String topic_code = nodes.item(0).getTextContent();
+					newsItem.getContentMeta().getSubject().setTopicCode(topic_code);
+				} else {
+					newsItem.getContentMeta().getSubject().setTopicCode("");
+				}
 				//Get name of news item article
 				expr = xpath.compile(SERVICE_NAME_XPATH);
 				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
@@ -313,6 +327,8 @@ public class PackageGenerator {
             NewsItem item = this.newsItems.get(i);
             if (item.getContentMeta().getSubject().getTopic().equals(topic)) {
                 newsItems.add(item);
+            } else if(item.getContentMeta().getSubject().getTopicCode().equals(topic)) {
+            	 newsItems.add(item);
             }
         }
         return newsItems;
@@ -579,40 +595,46 @@ public class PackageGenerator {
 	public static void main(String[] args) {;
 		boolean notAnInt = true;
 		Scanner scanner = new Scanner(System.in);
-		int type_attribute = 1;
+		int type_attribute_idx = 1;
 		String value_attribute;
 		String file_name;
+		ArrayList<String> attributes = new ArrayList<String>();
 		
+		attributes.add("All news items related to a specific topic");
+		attributes.add("Most recent news items from a specific department");
+		attributes.add("Most recent news items related to a specific category"); 
+		attributes.add("All news items related to a specific category"); 
 		System.out.print("PACKAGE GENERATOR V1 -- This package generator generates package of last ten news\n");
 		System.out.print("You can choose which type of package do you want to create\n");
 		System.out.print("Available types are :\n");
-		System.out.print(" - All news items related to a specific topic 1\n");
-		System.out.print(" - Most recent news items from a specific department 2\n");
-		System.out.print(" - Most recent news items related to a specific category 3\n");
-		System.out.print(" - All news items related to a specific category 4\n");
+		for(int i = 0; i < attributes.size(); i++)
+		{
+		    System.out.println(" - "+attributes.get(i)+" "+(i+1));
+		}
+		System.out.println("");
 		System.out.print("Which type of package do you want to create ?\n");
 		
 		while(notAnInt) {
 			try {
-				type_attribute = scanner.nextInt();
+				type_attribute_idx = scanner.nextInt();
 				
-				if(type_attribute > 0 && type_attribute < 5) {
-					System.out.print(type_attribute);
+				if(type_attribute_idx > 0 && type_attribute_idx < 5) {
 					notAnInt = false;
 				} else {
-					System.out.print("This option doesn't exist\n");
+					System.out.println("This option doesn't exist");
 					scanner.nextLine();
 				}
 			} catch(Exception e) {
-				System.out.print("This option doesn't exist\n");
+				System.out.println("This option doesn't exist");
 				scanner.nextLine();
 			}
 		}
 		
 		scanner.nextLine();
-		switch(type_attribute) {
+		
+		switch(type_attribute_idx) {
 			case 1:
-				System.out.print("What is the name of the topic ?\n");
+				System.out.print("What is the name or the qcode of the topic (e.g : \"stttopic:75182\" or \"Saksalaisten niukka enemmistö haluaisi eroon eurosta\"?\n");
 				break;
 				
 			case 2:
@@ -628,7 +650,7 @@ public class PackageGenerator {
 				break;
 				
 			default:
-				System.out.print("What is the name of the topic ?\n");
+				System.out.print("What is the name or the qcode of the topic (e.g : \"stttopic:75182\" or \"Saksalaisten niukka enemmistö haluaisi eroon eurosta\"?\n");
 				break;
 		}
 		value_attribute = scanner.nextLine();
@@ -638,6 +660,6 @@ public class PackageGenerator {
 		System.out.print("Choose the name of your package xml file (e.g. : package.xml) :\n");
 		file_name = scanner.nextLine();
 		
-		PackageGenerator packageGenerator = new PackageGenerator("./stt_lehtikuva_newsItems",type_attribute,value_attribute,file_name);
+		PackageGenerator packageGenerator = new PackageGenerator("./stt_lehtikuva_newsItems",type_attribute_idx,value_attribute,file_name);
 	}
 }

@@ -147,6 +147,7 @@ public class ContentMeta {
             private String code;
             private String name;
             private String topic;
+            private String topic_code;
             private String department;
             private ArrayList<String> categories;
             
@@ -182,6 +183,14 @@ public class ContentMeta {
             
             public void setTopic(String topic) {
                 this.topic = topic;
+            }
+            
+            public String getTopicCode() {
+                return this.topic_code;
+            }
+            
+            public void setTopicCode(String topic_code) {
+                this.topic_code = topic_code;
             }
             
             public String getDepartment() {
