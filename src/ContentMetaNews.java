@@ -19,9 +19,6 @@ public class ContentMetaNews {
         private String description;
         // Headline of the news item
         private String headline;
-        // packageItem specific elemets
-        private String contributor_name;
-        private String contributor_definition;
         
         public ContentMetaNews() {
             this.subject = new Subject();
@@ -121,22 +118,6 @@ public class ContentMetaNews {
             this.headline = headline;
         }
         
-        public String getContributorName() {
-            return contributor_name;
-        }
-    
-        public void setContributorName(String contributor_name) {
-            this.contributor_name = contributor_name;
-        }
-    
-        public String getContributorDefinition() {
-            return contributor_definition;
-        }
-    
-        public void setContributorDefinition(String contributor_definition) {
-            this.contributor_definition = contributor_definition;
-        }
-        
         /*
          * Subclass representing <subject> element in contentMeta
          * 
@@ -147,6 +128,7 @@ public class ContentMetaNews {
             private String code;
             private String name;
             private String topic;
+            private String topic_code;
             private String department;
             private ArrayList<String> categories;
             
@@ -182,6 +164,14 @@ public class ContentMetaNews {
             
             public void setTopic(String topic) {
                 this.topic = topic;
+            }
+            
+            public String getTopicCode() {
+                return this.topic_code;
+            }
+            
+            public void setTopicCode(String topic_code) {
+                this.topic_code = topic_code;
             }
             
             public String getDepartment() {
