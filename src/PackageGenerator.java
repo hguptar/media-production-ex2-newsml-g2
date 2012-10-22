@@ -609,15 +609,16 @@ public class PackageGenerator {
 		attributes.add("Most recent news items from a specific department");
 		attributes.add("Most recent news items related to a specific category"); 
 		attributes.add("All news items related to a specific category"); 
-		System.out.print("PACKAGE GENERATOR V1 -- This package generator generates package of last ten news\n");
-		System.out.print("You can choose which type of package do you want to create\n");
+		
+		System.out.print("PACKAGE GENERATOR V1 -- This package generator generates package of 4 different types\n");
+		System.out.print("You can choose which type of package do you want to create.\n");
 		System.out.print("Available types are :\n");
 		for(int i = 0; i < attributes.size(); i++)
 		{
 		    System.out.println(" - "+attributes.get(i)+" "+(i+1));
 		}
 		System.out.println("");
-		System.out.print("Which type of package do you want to create ?\n");
+		System.out.print("Which type of package do you want to create ? (1,2,3 or 4)\n");
 		
 		while(notAnInt) {
 			try {
