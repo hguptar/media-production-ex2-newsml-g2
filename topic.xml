@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packageItem xmlns="http://iptc.org/std/nar/2006-10-01/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" conformance="power" guid="" standard="NewsML-G2" standardversion="2.8" xsi:schemaLocation="http://iptc.org/std/nar/2006-10-01/../specification/NewsML-G2_2.9-spec-All-Power.xsd">
+<itemMeta>
+<itemClass qcode="ninat:composite"/>
+<provider literal="Aalto University Group Media"/>
+<versionCreated>Mon Oct 22 15:29:02 EEST 2012</versionCreated>
+<firstCreated>Mon Oct 22 15:29:02 EEST 2012</firstCreated>
+<pubStatus qcode="stat:usable"/>
+<generator versioninfo="1.0">Package Generator v1</generator>
+<profile versioninfo="1.0">ranked_idref_list</profile>
+<service qcode="svc:aaltotop">
+<name>Aalto University</name>
+</service>
+<title>MY PACKAGE</title>
+<edNote>DEFINE A NOTE</edNote>
+<signal qcode="act:replacePrev"/>
+<link rel="NO TAG" residref="irel:previousVersion" version="1"/>
+</itemMeta>
+<contentMeta>
+<contributor jobtitle="staffjobs:cpe" qcode="mystaff:MAndre">
+<name>Maxime Andre</name>
+<name>Chief Packaging Editor</name>
+<definition validto="2013-12-31T17:30:00Z">Duty Packaging Editor</definition>
+<note validto="2013-12-31T17:30:00Z">Available everyday</note>
+</contributor>
+<headline xml:lang=""/>
+</contentMeta>
+<groupSet root="root">
+<group id="root" role="group:root">
+<groupRef idref="G2"/>
+</group>
+<group id="G2" role="group:package">
+<itemRef contenttype="application/vnd.iptc.g2.newsitem+xml" residred="urn:newsml:stt.fi:20120729:95873425" size="256053866496">
+<itemClass qcode="ninat:text"/>
+<provider literal=""/>
+<versionCreated/>
+<pubStatus qcode=""/>
+<headline>Kysely: Saksalaisten mielestä maalla menisi paremmin ilman euroa</headline>
+</itemRef>
+</group>
+</groupSet>
+</packageItem>
+
