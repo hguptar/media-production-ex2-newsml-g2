@@ -165,10 +165,11 @@ public class PackageItem {
 	    item_ref.setSize(Long.toString(newsItem.getSize()));
 	    item_ref.setItemClass(newsItem.getItemMeta().getItemClass());
 	    item_ref.setProvider(newsItem.getItemMeta().getProvider());
-	    item_ref.setVersion_created(newsItem.getContentMeta().getContentCreated());
+	    item_ref.setVersion_created(newsItem.getItemMeta().getVersionCreated());
 	    item_ref.setPubStatus(newsItem.getItemMeta().getPubStatus());
 	    item_ref.setHeadline(newsItem.getContentMeta().getHeadline());
 	    item_ref.setDescription(newsItem.getContentMeta().getDescription());
+	    item_ref.setDescriptionRole(newsItem.getContentMeta().getDescriptionRole());
 	    
 	    group.setItemRef(item_ref);
 	    
@@ -256,10 +257,19 @@ public class PackageItem {
 	    private String pub_status;
 	    private String headline;
 	    private String description;
+	    private String description_role;
 	    
 	    public ItemRef() {};
 	    
-	    public String getResidref() {
+	    public String getDescriptionRole() {
+	        return this.description_role;
+	    }
+	    
+	    public void setDescriptionRole(String description_role) {
+	        this.description_role = description_role;
+        }
+
+        public String getResidref() {
 	        return this.residref;
 	    }
 	    

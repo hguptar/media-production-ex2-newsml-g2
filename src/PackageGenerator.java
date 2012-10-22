@@ -38,7 +38,9 @@ public class PackageGenerator {
 
 	private final static String GUID_XPATH = "/newsItem/@guid"; 
 	private final static String VERSION_XPATH = "/newsItem/@version"; 
+	private final static String PROVIDER_XPATH = "/newsItem/itemMeta/provider/@literal";
 	private final static String VERSION_CREATED_XPATH = "/newsItem/itemMeta/versionCreated";
+	private final static String PUBSTATUS_XPATH = "/newsItem/itemMeta/pubStatus/@qcode";
 	private final static String TYPE_ROLE_XPATH = "/newsItem/itemMeta/role/name";
 	private final static String URGENCY_XPATH = "/newsItem/contentMeta/urgency";
 	private final static String DEPARTMENT_XPATH = "/newsItem/contentMeta/subject[@type='cpnat:department']/name";
@@ -49,6 +51,8 @@ public class PackageGenerator {
 	private final static String LOCATION_XPATH = "/newsItem/contentMeta/located/name";
 	private final static String CLASS_XPATH = "/newsItem/itemMeta/itemClass/@qcode";
 	private final static String HEADLINE_XPATH = "/newsItem/contentMeta/headline";
+	private final static String DESCRIPTION_XPATH = "/newsItem/contentMeta/description";
+	private final static String DESCRIPTION_ROLE_XPATH = "/newsItem/contentMeta/description/@role";
 	
 	//Id of the root group
 	private final static String ROOT_GROUP = "root";
@@ -118,36 +122,55 @@ public class PackageGenerator {
 			
 			NewsItem newsItem = new NewsItem();
 			try {
-				//Get guid of the NewsItem
+				//Set guid of the NewsItem
 				expr = xpath.compile(GUID_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String guid = nodes.item(0).getTextContent();
 				newsItem.setGuid(guid);
 				
-				//Get version of the NewsItem
+				//Set version of the NewsItem
 				expr = xpath.compile(VERSION_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String version = nodes.item(0).getTextContent();
 				newsItem.setVersion(version);
 				
-				//Get date and time when current version of the NewsItem was sent
+				//Set date and time when current version of the NewsItem was sent
+                expr = xpath.compile(PROVIDER_XPATH);
+                nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
+                String provider = nodes.item(0).getTextContent();
+                newsItem.getItemMeta().setProvider(provider);
+				
+				//Set date and time when current version of the NewsItem was sent
 				expr = xpath.compile(VERSION_CREATED_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String version_created = nodes.item(0).getTextContent();
 				newsItem.getItemMeta().setVersionCreated(version_created);
 				
-				//Get type of news item article
+				//Set date and time when current version of the NewsItem was sent
+                expr = xpath.compile(PUBSTATUS_XPATH);
+                nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
+                String pub_status = nodes.item(0).getTextContent();
+                newsItem.getItemMeta().setPubStatus(pub_status);
+				
+				//Set type of news item article
 				expr = xpath.compile(TYPE_ROLE_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String role = nodes.item(0).getTextContent();
 				newsItem.getItemMeta().setRole(role);
 				
+				//Set headline the news item
 				expr = xpath.compile(DEPARTMENT_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String department = nodes.item(0).getTextContent();
 				newsItem.getContentMeta().getSubject().setDepartment(department);
 				
-				//Get NewsItem categories
+                //Set NewsItem urgency
+                expr = xpath.compile(URGENCY_XPATH);
+                nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
+                String urgency = nodes.item(0).getTextContent();
+                newsItem.getContentMeta().setUrgency(urgency);
+				
+				//Set NewsItem categories
 				expr = xpath.compile(CATEGORIES_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				ArrayList<String> categories = new ArrayList<String>();
@@ -156,7 +179,7 @@ public class PackageGenerator {
 				}
 				newsItem.getContentMeta().getSubject().setCategories(categories);
 				
-				//Get NewsItem topic
+				//Set NewsItem topic
 				expr = xpath.compile(TOPICS_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				if(nodes.item(0) != null) {
@@ -166,7 +189,7 @@ public class PackageGenerator {
 					newsItem.getContentMeta().getSubject().setTopic("");
 				}
 				
-				//Get NewsItem topic_code
+				//Set NewsItem topic_code
 				expr = xpath.compile(TOPICS_CODE_XPATH);
 				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				if(nodes.item(0) != null) {
@@ -175,35 +198,41 @@ public class PackageGenerator {
 				} else {
 					newsItem.getContentMeta().getSubject().setTopicCode("");
 				}
-				//Get name of news item article
+				//Set name of news item article
 				expr = xpath.compile(SERVICE_NAME_XPATH);
 				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String service_name = nodes.item(0).getTextContent();
 				newsItem.getItemMeta().setServiceName(service_name);
 				
-				//Get location of news item article
+				//Set location of news item article
 				expr = xpath.compile(LOCATION_XPATH);
 				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String location = nodes.item(0).getTextContent();
 				newsItem.getContentMeta().setLocation(location);
 				
-				//Get the class of news item
+				//Set the class of news item
 				expr = xpath.compile(CLASS_XPATH);
 				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String item_class = nodes.item(0).getTextContent();
 				newsItem.getItemMeta().setItemClass(item_class);
 				
-				//Get headline of news item
+				//Set headline of news item
 				expr = xpath.compile(HEADLINE_XPATH);
 				nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
 				String headline = nodes.item(0).getTextContent();
 				newsItem.getContentMeta().setHeadline(headline);
 				
-				//Get NewsItem urgency
-				expr = xpath.compile(URGENCY_XPATH);
-				nodes = (NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
-				String urgency = nodes.item(0).getTextContent();
-				newsItem.getContentMeta().setUrgency(urgency);
+				//Set description of news item
+                expr = xpath.compile(DESCRIPTION_XPATH);
+                nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
+                String description = nodes.item(0).getTextContent();
+                newsItem.getContentMeta().setDescription(description);
+				
+                //Set description of news item
+                expr = xpath.compile(DESCRIPTION_ROLE_XPATH);
+                nodes =(NodeList)expr.evaluate(xmlDocument, XPathConstants.NODESET);
+                String description_role = nodes.item(0).getTextContent();
+                newsItem.getContentMeta().setDescriptionRole(description_role);
 				
 				
 				newsItem.setSize(newsItemFile.getTotalSpace());
@@ -543,6 +572,7 @@ public class PackageGenerator {
 			
 			for(PackageItem.ItemRef item_ref : group.getItemRef()) {
 				Element itemRefElement = this.xmlPackageFile.createElement("itemRef");
+				
 				itemRefElement.setAttribute("residref",item_ref.getResidref());
 				itemRefElement.setAttribute("contenttype",item_ref.getContentType());
 				itemRefElement.setAttribute("size",item_ref.getSize());
@@ -563,6 +593,7 @@ public class PackageGenerator {
 				headline.setTextContent(item_ref.getHeadline());
 				
 				Element description = this.xmlPackageFile.createElement("description");
+				description.setAttribute("role", item_ref.getDescriptionRole());
 				description.setTextContent(item_ref.getDescription());
 				
 				itemRefElement.appendChild(itemClass);
@@ -570,6 +601,7 @@ public class PackageGenerator {
 				itemRefElement.appendChild(versionCreated);
 				itemRefElement.appendChild(pubStatus);
 				itemRefElement.appendChild(headline);
+				itemRefElement.appendChild(description);
 				
 				groupElement.appendChild(itemRefElement);
 			}

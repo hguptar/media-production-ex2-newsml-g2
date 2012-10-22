@@ -16,9 +16,9 @@ public class ContentMetaNews {
         private String located;
         public Subject subject;
         private String by;
-        private String description;
-        // Headline of the news item
         private String headline;
+        private String description;
+        private String description_role;
         
         public ContentMetaNews() {
             this.subject = new Subject();
@@ -102,6 +102,14 @@ public class ContentMetaNews {
             this.by = by;
         }
         
+        public String getHeadline() {
+            return headline;
+        }
+        
+        public void setHeadline(String headline) {
+            this.headline = headline;
+        }
+        
         public String getDescription() {
             return description;
         }
@@ -110,12 +118,12 @@ public class ContentMetaNews {
             this.description = description;
         }
         
-        public String getHeadline() {
-            return headline;
+        public String getDescriptionRole() {
+            return description_role;
         }
         
-        public void setHeadline(String headline) {
-            this.headline = headline;
+        public void setDescriptionRole(String description_role) {
+            this.description_role = description_role;
         }
         
         /*
